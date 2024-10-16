@@ -76,6 +76,7 @@
 </ion-content>
 
 <ion-footer>
+  <app-barrafooter *ngIf="usuarioRol === null"></app-barrafooter>
   <app-barrafooter *ngIf="usuarioRol === 2"></app-barrafooter>
   <app-barrafooter2 *ngIf="usuarioRol === 1"></app-barrafooter2>
 </ion-footer>

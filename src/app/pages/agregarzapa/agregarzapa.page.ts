@@ -46,7 +46,12 @@ export class AgregarZapaPage {
     }
   }
 
+  irInicio(){
+    this.router.navigate(['/inicio'])
+  }
+
   agregarZapatilla() {
     this.servicioBD.agregarProducto(this.zapatilla,this.marca,this.talla,this.precio,this.cantidad,this.imagenPreview);
-}
+    this.irInicio()
+  }
 }

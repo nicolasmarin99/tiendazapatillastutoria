@@ -43,3 +43,19 @@ ion-toolbar{
 .arreglar-lista{
     margin-top: 3px;
 }
+
+.imagen{
+    height: 200px;
+    width: 300px;
+}
+
+ion-card{
+    --background: white ;
+    color: black;
+    align-items: center;
+    text-align: center;
+}
+
+ion-card-title{
+    color:#000000
+}

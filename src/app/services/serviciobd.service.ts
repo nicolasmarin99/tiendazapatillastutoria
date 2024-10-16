@@ -84,7 +84,8 @@ export class ServiciobdService {
       await this.database.executeSql(this.tablaProductos, []);
       await this.database.executeSql(this.tablaCompras, []);
       await this.database.executeSql(this.tablaDetallesCompra, []);
-      await this.recrearTablaProductos()
+      await this.recrearTablaProductos();
+      
 
       // Inserta el usuario administrador
       await this.insertarAdministrador();
@@ -233,7 +234,7 @@ export class ServiciobdService {
     }
   }
 
-   agregarProducto(nombre:string, marca: string, talla: string, precio: number, cantidad: number, imagen: any) {
+  agregarProducto(nombre:string, marca: string, talla: string, precio: number, cantidad: number, imagen: any) {
     
     //cuando las variables a ingresar son variables de programacion, remplazo los valores por signo de interrogacion
     return this.database.executeSql('INSERT INTO Producto2 (nombre_producto, marca, talla, precio, cantidad, imagen_producto) VALUES (?, ?, ?, ?, ?, ?)',[nombre, marca, talla, precio, cantidad, imagen]).then(res=>{
@@ -323,6 +324,25 @@ export class ServiciobdService {
     } catch (error: any) {
       console.error('Error al recrear la tabla Producto:', error);
       this.presentAlert('Error', 'Hubo un error al recrear la tabla Producto: ' + error.message);
+    }
+  }
+
+  async borrarProductos() {
+    try {
+      // Ejecuta la sentencia DELETE para eliminar todos los registros
+      await this.database.executeSql('DELETE FROM Producto2', []);
+      
+      // Reinicia el contador de ID a 1 (opcional, si deseas reiniciar el autoincrement)
+      await this.database.executeSql('DELETE FROM sqlite_sequence WHERE name="Producto2"', []);
+  
+      // Actualizar el observable para reflejar que la tabla está vacía
+      this.listaProductos.next([]);
+      
+      // Mostrar alerta indicando que los productos fueron eliminados
+      this.presentAlert('Borrado exitoso', 'Todos los productos han sido eliminados.');
+    } catch (e) {
+      // Mostrar alerta de error en caso de fallo
+      this.presentAlert('Error al borrar', 'Error: ' + JSON.stringify(e));
     }
   }
 

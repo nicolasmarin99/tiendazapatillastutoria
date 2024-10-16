@@ -35,7 +35,7 @@
 </ion-content>
 
 <ion-footer>
-  
+      <app-barrafooter *ngIf="usuarioRol === 0"></app-barrafooter>
       <!-- Mostrar para usuarios con rol 2 -->
       <app-barrafooter *ngIf="usuarioRol === 2"></app-barrafooter>
 

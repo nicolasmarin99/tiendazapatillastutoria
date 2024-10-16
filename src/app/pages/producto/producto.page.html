@@ -78,6 +78,7 @@
   
       <!-- Mostrar para usuarios con rol 2 -->
       <app-barrafooter *ngIf="usuarioRol === 2"></app-barrafooter>
+      <app-barrafooter *ngIf="usuarioRol === null"></app-barrafooter>
 
       <!-- Mostrar para otros roles o si el rol no se ha cargado -->
       <app-barrafooter2 *ngIf="usuarioRol === 1"></app-barrafooter2>

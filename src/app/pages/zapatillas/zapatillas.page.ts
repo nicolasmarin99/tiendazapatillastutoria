@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { MenuController } from '@ionic/angular';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AlertController, MenuController } from '@ionic/angular';
+import { Producto } from 'src/app/services/producto';
 import { ServiciobdService } from 'src/app/services/serviciobd.service';
 
 @Component({
@@ -11,10 +12,36 @@ import { ServiciobdService } from 'src/app/services/serviciobd.service';
 export class ZapatillasPage implements OnInit {
 
   usuarioRol: number | null = null; // Aquí se almacenará el rol del usuario
+  usuario: string = "";
+  productos: Producto[] = [];
 
-  constructor(private router: Router, private dbService:ServiciobdService) { }
+  constructor(private router: Router, private dbService:ServiciobdService,private alertController: AlertController,private activerouter: ActivatedRoute) {
+
+    this.activerouter.queryParams.subscribe(params => {
+      if (this.router.getCurrentNavigation()?.extras.state) {
+        this.usuario = this.router.getCurrentNavigation()?.extras?.state?.['user'];
+      }
+    });
+    
+    //this.presentAlert("1"); 
+    //this.dbService.obtenerProductos();
+    this.dbService.fetchProductos().subscribe(data => {
+      this.productos = data;
+    });
+    this.presentAlert(this.productos+"");
+    //this.presentAlert("2");
+   }
 
   ngOnInit() {
+  }
+
+  async presentAlert(message: string) {
+    const alert = await this.alertController.create({
+      header: 'Información',
+      message: message,
+      buttons: ['OK'],
+    });
+    await alert.present();
   }
 
   ionViewDidEnter() {
