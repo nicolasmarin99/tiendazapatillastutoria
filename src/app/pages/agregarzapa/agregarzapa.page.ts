@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Route, Router } from '@angular/router';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { AlertController } from '@ionic/angular';
+import { Producto } from 'src/app/services/producto';
 import { ServiciobdService } from 'src/app/services/serviciobd.service';
 
 @Component({
@@ -45,11 +46,21 @@ export class AgregarZapaPage {
     }
   }
 
-  // Método para agregar la zapatilla a la base de datos
   async agregarZapatilla() {
     try {
       if (this.zapatilla && this.cantidad > 0 && this.precio > 0 && this.talla && this.imagen && this.marca) {
-        await this.servicioBD.agregarProducto(this.zapatilla, this.marca, this.talla, this.precio, this.cantidad, this.imagen);
+        // Crear el objeto Producto
+        const nuevoProducto: Producto = {
+          id_producto: '', // Este campo no es necesario ya que se autoincrementa
+          nombre_producto: this.zapatilla,
+          marca: this.marca,
+          talla: this.talla,
+          precio: this.precio,
+          cantidad: this.cantidad,
+          imagen: this.imagen
+        };
+
+        await this.servicioBD.agregarProducto(nuevoProducto);
         
         // Mostrar alerta de éxito
         const alert = await this.alertController.create({
@@ -71,5 +82,5 @@ export class AgregarZapaPage {
     } catch (error) {
       console.error('Error al agregar la zapatilla:', error);
     }
-  }
+}
 }

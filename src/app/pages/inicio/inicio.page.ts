@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { Producto } from 'src/app/services/producto';
 import { ServiciobdService } from 'src/app/services/serviciobd.service';
 
 @Component({
@@ -12,6 +13,7 @@ export class InicioPage implements OnInit {
   terminoBusqueda: string = "";
   usuario: string = "";
   usuarioRol: number | null = null; // Aquí se almacenará el rol del usuario
+  productos: Producto[] = [];
   
   constructor(private router: Router, private activerouter: ActivatedRoute,private dbService:ServiciobdService) {
     this.activerouter.queryParams.subscribe(params => {
@@ -21,7 +23,8 @@ export class InicioPage implements OnInit {
     })
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.cargarProductos();
   }
 
   ionViewDidEnter() {
@@ -32,6 +35,14 @@ export class InicioPage implements OnInit {
       }).catch(error => {
         console.error('Error al obtener el rol del usuario:', error);
       });
+    }
+  }
+
+  async cargarProductos() {
+    try {
+      this.productos = await this.dbService.obtenerProductos();
+    } catch (error) {
+      console.error('Error al cargar productos:', error);
     }
   }
 

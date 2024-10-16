@@ -3,6 +3,7 @@ import { SQLite, SQLiteObject } from '@awesome-cordova-plugins/sqlite/ngx';
 import { AlertController, Platform } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { DatosDireccion, Usuarios } from './usuarios';
+import { Producto } from './producto';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,7 @@ export class ServiciobdService {
 
   tablaDetallesCompra:string ="CREATE TABLE IF NOT EXISTS DetalleCompra (id_detalle INTEGER PRIMARY KEY AUTOINCREMENT,id_compra INTEGER,id_producto INTEGER,cantidad INTEGER NOT NULL,talla TEXT NOT NULL,precio_unitario REAL NOT NULL,FOREIGN KEY (id_compra) REFERENCES Compra(id_compra), FOREIGN KEY (id_producto) REFERENCES Producto(id_producto));";
 
-  nuevaTablaProductos:string = `CREATE TABLE IF NOT EXISTS Producto (id_producto INTEGER PRIMARY KEY AUTOINCREMENT,nombre_producto TEXT NOT NULL,marca TEXT NOT NULL,talla TEXT NOT NULL,precio REAL NOT NULL, cantidad INTEGER NOT NULL,imagen_producto BLOB);`;
+  nuevaTablaProductos:string = `CREATE TABLE IF NOT EXISTS Producto2 (id_producto INTEGER PRIMARY KEY AUTOINCREMENT,nombre_producto TEXT NOT NULL,marca TEXT NOT NULL,talla TEXT NOT NULL,precio REAL NOT NULL, cantidad INTEGER NOT NULL,imagen_producto BLOB);`;
   
   //variables para guardar los datos de las consultas en las tablas
   listadoUsuarios = new BehaviorSubject([]);
@@ -228,14 +229,44 @@ export class ServiciobdService {
     }
   }
 
-  async agregarProducto(nombre_producto: string, marca: string, talla: string, precio: number, cantidad: number, imagen_producto: Blob) {
+  async agregarProducto(producto: Producto) {
     const query = `
-      INSERT INTO Producto (nombre_producto, marca, talla, precio, cantidad, imagen_producto) 
+      INSERT INTO Producto2 (nombre_producto, marca, talla, precio, cantidad, imagen_producto) 
       VALUES (?, ?, ?, ?, ?, ?)
     `;
-    const blob = new Blob([imagen_producto]);
-    await this.database.executeSql(query, [nombre_producto, marca, talla, precio, cantidad, blob]);
+    try {
+      await this.database.executeSql(query, [
+        producto.nombre_producto,
+        producto.marca,
+        producto.talla,
+        producto.precio,
+        producto.cantidad,
+        producto.imagen
+      ]);
+      console.log('Producto agregado exitosamente.');
+    } catch (error) {
+      console.error('Error al agregar producto:', error);
+      throw new Error('Error en la inserción del producto');
+    }
   }
+
+  async obtenerProductos(): Promise<Producto[]> {
+    const query = 'SELECT * FROM Producto';
+    try {
+      const res = await this.database.executeSql(query, []);
+      const productos: Producto[] = [];
+  
+      for (let i = 0; i < res.rows.length; i++) {
+        productos.push(res.rows.item(i));
+      }
+  
+      return productos;
+    } catch (error) {
+      console.error('Error al obtener productos:', error);
+      throw new Error('Error en la consulta de productos');
+    }
+  }
+
    // Método para ejecutar consultas SQL
   async executeQuery(query: string, params: any[] = []): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -258,7 +289,7 @@ export class ServiciobdService {
   
       // Crear la nueva tabla con el campo "imagen_producto" de tipo BLOB
       const nuevaTablaProductos = `
-        CREATE TABLE IF NOT EXISTS Producto (
+        CREATE TABLE IF NOT EXISTS Producto2 (
           id_producto INTEGER PRIMARY KEY AUTOINCREMENT,
           nombre_producto TEXT NOT NULL,
           marca TEXT NOT NULL,
