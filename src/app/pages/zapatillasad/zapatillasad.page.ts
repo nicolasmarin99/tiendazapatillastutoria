@@ -54,6 +54,18 @@ export class ZapatillasadPage implements OnInit {
       });
     }
   }
+
+  // Función para eliminar producto
+  eliminarProducto(id_producto: number) {
+    // Eliminar el producto de la base de datos
+    this.dbService.eliminarProducto(id_producto).then(() => {
+      // Eliminar el producto de la lista local
+      this.productos = this.productos.filter(producto => producto.id_producto !== id_producto);
+    }).catch(error => {
+      console.error('Error al eliminar producto', error);
+    });
+  }
+
   irProducto(){
     this.router.navigate(['/producto'])
   }

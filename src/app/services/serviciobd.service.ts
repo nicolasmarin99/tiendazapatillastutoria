@@ -279,7 +279,21 @@ export class ServiciobdService {
     }).catch(e => {
         this.presentAlert('Error', 'Error al obtener productos: ' + JSON.stringify(e));
     });
-}
+  }
+
+   // Método para eliminar un producto por su ID
+  eliminarProducto(id_producto: number): Promise<any> {
+    const query = 'DELETE FROM Producto2 WHERE id_producto = ?';
+    return this.database.executeSql(query, [id_producto])
+      .then(res => {
+        console.log('Producto eliminado');
+        return res;
+      })
+      .catch(error => {
+        console.error('Error al eliminar producto', error);
+        throw error;
+      });
+  }
 
   // Método para ejecutar consultas SQL
   async executeQuery(query: string, params: any[] = []): Promise<any> {
