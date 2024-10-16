@@ -1,9 +1,9 @@
 export class Producto {
-    id_producto!:string;
-    nombre_producto!:string;
-    marca!:string;
-    talla!:string;
-    precio!:number;
-    cantidad!:number;
-    imagen!:any;
+    id_producto:any;
+    nombre_producto:any;
+    marca:any;
+    talla:any;
+    precio:any;
+    cantidad:any;
+    imagen_producto:any;
 }

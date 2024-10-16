@@ -17,7 +17,7 @@ export class AgregarZapaPage {
   talla: string = '';
   marca: string = '';
   imagen: Blob | null = null; // Para almacenar la imagen como BLOB
-  imagenPreview: string | null = null; // Para la vista previa de la imagen
+  imagenPreview: any | null = null; // Para la vista previa de la imagen
   usuarioRol: number | null = null; // Aquí se almacenará el rol del usuario
 
   constructor(private servicioBD: ServiciobdService,private alertController:AlertController,private router:Router) {}
@@ -31,9 +31,9 @@ export class AgregarZapaPage {
       });
   
       // Convertir la imagen a BLOB
-      const response = await fetch(image.webPath!);
-      const blob = await response.blob();
-      this.imagen = blob;
+      //const response = await fetch(image.webPath!);
+      //const blob = await response.blob();
+      //this.imagen = blob;
   
       // Para mostrar la vista previa de la imagen
       if (image.webPath) {
@@ -46,41 +46,7 @@ export class AgregarZapaPage {
     }
   }
 
-  async agregarZapatilla() {
-    try {
-      if (this.zapatilla && this.cantidad > 0 && this.precio > 0 && this.talla && this.imagen && this.marca) {
-        // Crear el objeto Producto
-        const nuevoProducto: Producto = {
-          id_producto: '', // Este campo no es necesario ya que se autoincrementa
-          nombre_producto: this.zapatilla,
-          marca: this.marca,
-          talla: this.talla,
-          precio: this.precio,
-          cantidad: this.cantidad,
-          imagen: this.imagen
-        };
-
-        await this.servicioBD.agregarProducto(nuevoProducto);
-        
-        // Mostrar alerta de éxito
-        const alert = await this.alertController.create({
-          header: 'Éxito',
-          message: 'Producto ingresado exitosamente.',
-          buttons: [{
-            text: 'Aceptar',
-            handler: () => {
-              // Redirigir a la página de inicio
-              this.router.navigate(['/inicio']);
-            }
-          }]
-        });
-
-        await alert.present();
-      } else {
-        console.error('Por favor completa todos los campos.');
-      }
-    } catch (error) {
-      console.error('Error al agregar la zapatilla:', error);
-    }
+  agregarZapatilla() {
+    this.servicioBD.agregarProducto(this.zapatilla,this.marca,this.talla,this.precio,this.cantidad,this.imagenPreview);
 }
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 import { Producto } from 'src/app/services/producto';
 import { ServiciobdService } from 'src/app/services/serviciobd.service';
 
@@ -15,16 +16,42 @@ export class InicioPage implements OnInit {
   usuarioRol: number | null = null; // Aquí se almacenará el rol del usuario
   productos: Producto[] = [];
   
-  constructor(private router: Router, private activerouter: ActivatedRoute,private dbService:ServiciobdService) {
+  constructor(
+    private router: Router,
+    private activerouter: ActivatedRoute,
+    private dbService: ServiciobdService,
+    private alertController: AlertController 
+  ){
     this.activerouter.queryParams.subscribe(params => {
-      if(this.router.getCurrentNavigation()?.extras.state){
+      if (this.router.getCurrentNavigation()?.extras.state) {
         this.usuario = this.router.getCurrentNavigation()?.extras?.state?.['user'];
       }
-    })
+    });
+    
+    //this.presentAlert("1"); 
+    //this.dbService.obtenerProductos();
+    this.dbService.fetchProductos().subscribe(data => {
+      this.productos = data;
+    });
+    this.presentAlert(this.productos+"");
+    //this.presentAlert("2");
   }
 
-  async ngOnInit() {
-    await this.cargarProductos();
+  ngOnInit() {
+    //this.dbService.obtenerProductos();
+   // this.dbService.fetchProductos().subscribe(data=>{
+    //  this.productos = data;
+   // });
+  }
+
+  // Método para mostrar alertas
+  async presentAlert(message: string) {
+    const alert = await this.alertController.create({
+      header: 'Información',
+      message: message,
+      buttons: ['OK'],
+    });
+    await alert.present();
   }
 
   ionViewDidEnter() {
@@ -37,14 +64,7 @@ export class InicioPage implements OnInit {
       });
     }
   }
-
-  async cargarProductos() {
-    try {
-      this.productos = await this.dbService.obtenerProductos();
-    } catch (error) {
-      console.error('Error al cargar productos:', error);
-    }
-  }
+  
 
   irZapatillasad(){
     this.router.navigate(['/zapatillasad'])

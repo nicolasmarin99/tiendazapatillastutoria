@@ -30,7 +30,7 @@
         <p>Talla: {{ producto.talla }}</p>
         <p>Precio: ${{ producto.precio }}</p>
         <p>Cantidad: {{ producto.cantidad }}</p>
-        <img *ngIf="producto.imagen" [src]="producto.imagen" alt="Imagen del producto" />
+        <img *ngIf="producto.imagen_producto" [src]="producto.imagen_producto" alt="Imagen del producto" />
       </ion-label>
     </ion-item>
   </ion-list>
