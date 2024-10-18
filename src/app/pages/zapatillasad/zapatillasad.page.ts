@@ -87,9 +87,6 @@ export class ZapatillasadPage implements OnInit {
     this.router.navigate(['/agregarmarca'])
   }
 
-  irEditarzapa(){
-    this.router.navigate(['/editarzapa'])
-  }
   ocultar(){
 
   }

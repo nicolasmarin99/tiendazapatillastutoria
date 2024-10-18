@@ -13,6 +13,7 @@ export class ProductoPage implements OnInit {
 
   producto: Producto;
   usuarioRol: number | null = null; // Aquí se almacenará el rol del usuario
+  esAdmin: boolean = false; // Bandera para saber si el usuario es el admin
 
 
   constructor(private router:ActivatedRoute,private alertController: AlertController, private dbService:ServiciobdService) {
@@ -40,6 +41,10 @@ export class ProductoPage implements OnInit {
   ionViewDidEnter() {
     const id_usuario = localStorage.getItem('id_usuario');
     if (id_usuario) {
+      // Verificas si el usuario es admin (ID = 1)
+      if (Number(id_usuario) === 1) {
+        this.esAdmin = true; // El usuario es admin
+      }
       this.dbService.obtenerRolUsuario(Number(id_usuario)).then(rol => {
         this.usuarioRol = rol;
       }).catch(error => {

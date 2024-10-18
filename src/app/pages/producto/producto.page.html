@@ -29,6 +29,9 @@
       <p>Precio: ${{ producto.precio }}</p>
       <p>Cantidad: {{ producto.cantidad }}</p>
     </ion-card-content>
+
+    <!-- Botón de editar, solo visible si el usuario es admin -->
+    <ion-button *ngIf="esAdmin">Editar producto</ion-button>
   </ion-card>
 
 </ion-content>
