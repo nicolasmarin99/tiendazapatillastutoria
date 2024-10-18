@@ -12,7 +12,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/inicio/inicio.module').then( m => m.InicioPageModule)
   },
   {
-    path: 'producto',
+    path: 'producto/:id',
     loadChildren: () => import('./pages/producto/producto.module').then( m => m.ProductoPageModule)
   },
   {

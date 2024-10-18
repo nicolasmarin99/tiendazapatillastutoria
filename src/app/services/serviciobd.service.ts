@@ -295,6 +295,36 @@ export class ServiciobdService {
       });
   }
 
+  modificarProducto(id_producto: number, nombre: string, cantidad: number, precio: number, talla: string, marca: string, imagen: Blob) {
+    const query = `UPDATE Producto2 SET nombre_producto = ?, cantidad = ?, precio = ?, talla = ?, marca = ?, imagen_producto = ? WHERE id_producto = ?`;
+    return this.database.executeSql(query, [nombre, cantidad, precio, talla, marca, imagen, id_producto]);
+  }
+
+  obtenerProductoPorId(id: string): Promise<Producto> {
+    return new Promise((resolve, reject) => {
+      // Lógica para obtener el producto de la base de datos usando el ID
+      const query = 'SELECT * FROM Producto2 WHERE id_producto = ?';
+      this.database.transaction((tx: any) => {  // Agregando el tipo 'any' para 'tx'.
+        tx.executeSql(query, [id], (tx: any, result: any) => { // Agregando el tipo 'any' para 'result'.
+          if (result.rows.length > 0) {
+            const item = result.rows.item(0);
+            const producto = new Producto();
+            producto.id_producto = item.id_producto;
+            producto.nombre_producto = item.nombre_producto;
+            producto.marca = item.marca;
+            producto.talla = item.talla;
+            producto.precio = item.precio;
+            producto.cantidad = item.cantidad;
+            producto.imagen_producto = item.imagen_producto;
+            resolve(producto);
+          } else {
+            reject('Producto no encontrado');
+          }
+        });
+      });
+    });
+  }
+
   // Método para ejecutar consultas SQL
   async executeQuery(query: string, params: any[] = []): Promise<any> {
     return new Promise((resolve, reject) => {

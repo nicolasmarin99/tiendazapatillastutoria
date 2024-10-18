@@ -3,6 +3,7 @@ import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { Producto } from 'src/app/services/producto';
 import { ServiciobdService } from 'src/app/services/serviciobd.service';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-inicio',
@@ -20,7 +21,8 @@ export class InicioPage implements OnInit {
     private router: Router,
     private activerouter: ActivatedRoute,
     private dbService: ServiciobdService,
-    private alertController: AlertController 
+    private alertController: AlertController,
+    private navCtrl:NavController
   ){
     this.activerouter.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation()?.extras.state) {
@@ -65,6 +67,10 @@ export class InicioPage implements OnInit {
     }
   }
   
+  // Función para redirigir a la página de detalles del producto
+  irADetalleProducto(id_producto: any): void {
+    this.router.navigate(['/producto', id_producto]);
+}
 
   irZapatillasad(){
     this.router.navigate(['/zapatillasad'])

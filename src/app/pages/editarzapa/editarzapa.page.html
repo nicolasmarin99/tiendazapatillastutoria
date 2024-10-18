@@ -11,18 +11,21 @@
 
       
       <div class="contenedor-input margin-auto">
-        <ion-input label="Nombre zapatilla" label-placement="floating" fill="outline" type="text" placeholder="Ingrese el nombre de la zapatilla." [(ngModel)]="zapatilla"></ion-input>
+        <ion-input label="Nombre zapatilla" label-placement="floating" fill="outline" type="text" placeholder="Ingrese el nombre de la zapatilla." [(ngModel)]="Producto2.nombre_producto"></ion-input>
 
         <br>
 
-        <ion-input label="Cantidad" label-placement="floating" fill="outline" type="Number" placeholder="Ingrese la cantidad." [(ngModel)]="cantidad"></ion-input>
+        <ion-input label="Cantidad" label-placement="floating" fill="outline" type="Number" placeholder="Ingrese la cantidad." [(ngModel)]="Producto2.cantidad"></ion-input>
+
+        <br>
+        <ion-input label="precio" label-placement="floating" fill="outline" type="Number" placeholder="Ingrese la cantidad." [(ngModel)]="Producto2.precio"></ion-input>
 
         <br>
 
         <div class="margin-auto">
           <ion-list class="sin-padding">
             <ion-item class="fondo">
-              <ion-select aria-label="Talla" interface="action-sheet" placeholder="Talla (US)" [(ngModel)]="talla">
+              <ion-select aria-label="Talla" interface="action-sheet" placeholder="Talla (US)" [(ngModel)]="Producto2.talla">
                 <ion-select-option value="7.5">7.5 (25.5 cms)</ion-select-option>
                 <ion-select-option value="8">8 (26 cms)</ion-select-option>
                 <ion-select-option value="8.5">8.5 (26.5 cms)</ion-select-option>
@@ -42,7 +45,7 @@
         <div class="margin-auto">
           <ion-list class="sin-padding">
             <ion-item class="fondo">
-              <ion-select aria-label="Marca" interface="action-sheet" placeholder="Marca" [(ngModel)]="marca">
+              <ion-select aria-label="Marca" interface="action-sheet" placeholder="Marca" [(ngModel)]="Producto2.marca">
                 <ion-select-option value="Puma">Puma</ion-select-option>
                 <ion-select-option value="Adidas">Adidas</ion-select-option>
               </ion-select>
@@ -52,14 +55,19 @@
 
         <br>
 
-        Ingrese la imagen de la zapatilla:
-        <div class="contenedor-imagen margin-auto centrar"><img src="../../../assets/agregar imagen.jpg" alt="" class="tamano-imagen"></div>
+        <!-- Botón para elegir imagen de la galería -->
+        <ion-button (click)="tomarFoto()">Seleccionar Imagen</ion-button>
+        <!-- Mostrar la imagen seleccionada -->
+        <div class="contenedor-imagen margin-auto centrar">
+          <img *ngIf="imagenPreview" [src]="imagenPreview" alt="Imagen de la zapatilla" class="tamano-imagen">
+        </div>
+
       </div>
 
       <br>
 
       <div class="contenedor-input margin-auto centrar">
-        <ion-button class="color" (click)="validarZapatilla()">
+        <ion-button class="color" (click)="modificar()">
           <ion-icon slot="start" name="Pencil"></ion-icon>
           Editar
         </ion-button>

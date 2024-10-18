@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { ServiciobdService } from 'src/app/services/serviciobd.service';
+import {Producto} from 'src/app/services/producto'
 
 @Component({
   selector: 'app-producto',
@@ -10,24 +11,31 @@ import { ServiciobdService } from 'src/app/services/serviciobd.service';
 })
 export class ProductoPage implements OnInit {
 
-  terminoBusqueda: string = "";
-  talla: string = "";
-  marca: string = "";
+  producto: Producto;
   usuarioRol: number | null = null; // Aquí se almacenará el rol del usuario
-  constructor(private router: Router,private alertController: AlertController, private dbService:ServiciobdService) { }
+
+
+  constructor(private router:ActivatedRoute,private alertController: AlertController, private dbService:ServiciobdService) {
+    this.producto = new Producto();
+  }
   
 
   ngOnInit() {
+     // Obtiene el id del producto de la URL
+    const id = this.router.snapshot.paramMap.get('id');
+    if (id) {
+      this.obtenerProductoPorId(id);
+    }
   }
 
-  async presentAlert(titulo: string, msj: string) {
-    const alert = await this.alertController.create({
-      header: titulo,
-      message: msj,
-      buttons: ['OK']
+  obtenerProductoPorId(id: string) {
+    // Aquí debes llamar a un método en tu servicio para obtener el producto por ID
+    this.dbService.obtenerProductoPorId(id).then((data: Producto) => {
+      this.producto = data;
     });
-    await alert.present();
   }
+  
+
 
   ionViewDidEnter() {
     const id_usuario = localStorage.getItem('id_usuario');
@@ -40,14 +48,7 @@ export class ProductoPage implements OnInit {
     }
   }
 
-  validarProducto(){
-    if ((this.talla== '') || (this.marca== '')){
-      this.presentAlert('Error','Los campos no pueden estar vacios')
-    }
+  
 
-    else{
-      this.presentAlert('Exito','Los productos se añadieron correctamente.')
-      this.router.navigate(['/carrito'])
-    }
-  }
+
 }
