@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { ServiciobdService } from 'src/app/services/serviciobd.service';
 import { Camera, CameraResultType } from '@capacitor/camera';
+import { Producto } from 'src/app/services/producto';
 
 @Component({
   selector: 'app-editarzapa',
@@ -12,19 +13,27 @@ import { Camera, CameraResultType } from '@capacitor/camera';
 export class EditarzapaPage implements OnInit {
 
   usuarioRol: number | null = null; // Aquí se almacenará el rol del usuario
-  Producto2:any
   imagenPreview: any | null = null;
   imagen: Blob | null = null; // Para almacenar la imagen como BLOB
+  producto: Producto;
 
   constructor(private router: Router,private alertController: AlertController,private dbService:ServiciobdService,private activedrouter:ActivatedRoute) { 
-    this.activedrouter.queryParams.subscribe(res => {
-      if (this.router.getCurrentNavigation()?.extras.state) {
-          this.Producto2 = this.router.getCurrentNavigation()?.extras?.state?.['Producto2'];
-      }
-  });
+    this.producto = new Producto();
   }
 
   ngOnInit() {
+    // Obtiene el id del producto desde la URL
+    const id = this.activedrouter.snapshot.paramMap.get('id');
+    if (id) {
+      this.obtenerProductoPorId(id);
+    }
+  }
+
+  obtenerProductoPorId(id: string) {
+    // Aquí llamas a tu servicio para obtener el producto por su ID
+    this.dbService.obtenerProductoPorId(id).then((data: Producto) => {
+      this.producto = data;
+    });
   }
 
   async presentAlert(titulo: string, msj: string) {
@@ -47,52 +56,14 @@ export class EditarzapaPage implements OnInit {
     }
   }
 
-  async tomarFoto() {
-    try {
-      const image = await Camera.getPhoto({
-        quality: 90,
-        allowEditing: false,
-        resultType: CameraResultType.Uri,
-      });
-  
-      if (image.webPath) {
-        this.imagenPreview = image.webPath;
-  
-        // Convertir la imagen en BLOB
-        const response = await fetch(image.webPath);
-        this.imagen = await response.blob();  // Almacena el BLOB en this.imagen
-      } else {
-        this.imagenPreview = null;
-        this.imagen = null;
-      }
-    } catch (error) {
-      console.error('Error al tomar la foto:', error);
-      this.presentAlert('Error', 'No se pudo tomar la foto: ' + error);
-    }
-  }
 
-
-  modificar() {
-    console.log("Botón Editar presionado. Producto a modificar:", this.Producto2);
-  
-    // Check if the image is null and handle it accordingly
-    if (this.imagen) {
-      this.dbService.modificarProducto(
-        this.Producto2.id_producto,
-        this.Producto2.nombre_producto,
-        this.Producto2.cantidad,
-        this.Producto2.precio,
-        this.Producto2.talla,
-        this.Producto2.marca,
-        this.imagen // Pass the Blob here if it's not null
-      ).then(() => {
-        this.presentAlert('Éxito', 'Producto modificado correctamente.');
-        this.router.navigate(['/zapatillasad']); // Redirigir después de modificar
-      }).catch(error => {
-        this.presentAlert('Error', 'Error al modificar el producto: ' + error);
-      });
-    } else {
-      this.presentAlert('Error', 'No se ha seleccionado ninguna imagen.');
-    }
+  guardarCambios() {
+    // Llama al servicio de base de datos para actualizar el producto
+    this.dbService.actualizarProducto(this.producto).then(() => {
+      // Redirige a la página de productos o muestra un mensaje de éxito
+      this.router.navigate(['/producto', this.producto.id_producto]);
+    }).catch(error => {
+      console.error('Error al actualizar el producto:', error);
+    });
   }
 }

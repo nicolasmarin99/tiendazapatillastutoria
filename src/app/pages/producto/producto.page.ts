@@ -16,7 +16,7 @@ export class ProductoPage implements OnInit {
   esAdmin: boolean = false; // Bandera para saber si el usuario es el admin
 
 
-  constructor(private router:ActivatedRoute,private alertController: AlertController, private dbService:ServiciobdService) {
+  constructor(private router:ActivatedRoute,private alertController: AlertController, private dbService:ServiciobdService,private navRouter: Router) {
     this.producto = new Producto();
   }
   
@@ -51,6 +51,10 @@ export class ProductoPage implements OnInit {
         console.error('Error al obtener el rol del usuario:', error);
       });
     }
+  }
+
+  editarProducto() {
+    this.navRouter.navigate(['/editarzapa', this.producto.id_producto]);
   }
 
   

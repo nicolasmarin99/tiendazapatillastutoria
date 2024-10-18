@@ -31,7 +31,7 @@
     </ion-card-content>
 
     <!-- Botón de editar, solo visible si el usuario es admin -->
-    <ion-button *ngIf="esAdmin">Editar producto</ion-button>
+    <ion-button *ngIf="esAdmin" (click)="editarProducto()">Editar producto</ion-button>
   </ion-card>
 
 </ion-content>

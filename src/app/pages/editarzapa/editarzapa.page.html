@@ -4,76 +4,40 @@
 
 <ion-content [fullscreen]="true">
   
-  <div class="contenedor-pag">
-    <div class="contenedor-editar centrar-eje margin-auto">
-      <br>
-      <app-logo></app-logo>
+  <form (ngSubmit)="guardarCambios()">
+    
+    <ion-item>
+      <ion-label>Nombre</ion-label>
+      <ion-input [(ngModel)]="producto.nombre_producto" name="nombre"></ion-input>
+    </ion-item>
 
+    <ion-item>
+      <ion-label>Marca</ion-label>
+      <ion-input [(ngModel)]="producto.marca" name="marca"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Talla</ion-label>
+      <ion-input [(ngModel)]="producto.talla" name="talla"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Precio</ion-label>
+      <ion-input type="number" [(ngModel)]="producto.precio" name="precio"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Cantidad</ion-label>
+      <ion-input type="number" [(ngModel)]="producto.cantidad" name="cantidad"></ion-input>
+    </ion-item>
+
+    <!-- Puedes agregar un campo para seleccionar o cargar una nueva imagen -->
+
+    <ion-button expand="block" type="submit">Guardar Cambios</ion-button>
+  </form>
       
-      <div class="contenedor-input margin-auto">
-        <ion-input label="Nombre zapatilla" label-placement="floating" fill="outline" type="text" placeholder="Ingrese el nombre de la zapatilla." [(ngModel)]="Producto2.nombre_producto"></ion-input>
+    
 
-        <br>
-
-        <ion-input label="Cantidad" label-placement="floating" fill="outline" type="Number" placeholder="Ingrese la cantidad." [(ngModel)]="Producto2.cantidad"></ion-input>
-
-        <br>
-        <ion-input label="precio" label-placement="floating" fill="outline" type="Number" placeholder="Ingrese la cantidad." [(ngModel)]="Producto2.precio"></ion-input>
-
-        <br>
-
-        <div class="margin-auto">
-          <ion-list class="sin-padding">
-            <ion-item class="fondo">
-              <ion-select aria-label="Talla" interface="action-sheet" placeholder="Talla (US)" [(ngModel)]="Producto2.talla">
-                <ion-select-option value="7.5">7.5 (25.5 cms)</ion-select-option>
-                <ion-select-option value="8">8 (26 cms)</ion-select-option>
-                <ion-select-option value="8.5">8.5 (26.5 cms)</ion-select-option>
-                <ion-select-option value="9">9 (27 cms)</ion-select-option>
-                <ion-select-option value="9.5">9.5 (27.5 cms)</ion-select-option>
-                <ion-select-option value="10">10 (28 cms)</ion-select-option>
-                <ion-select-option value="10.5">10.5 (28.5 cms)</ion-select-option>
-                <ion-select-option value="11">11 (29 cms)</ion-select-option>
-                <ion-select-option value="11.5">11.5 (29.5 cms)</ion-select-option>
-              </ion-select>
-            </ion-item>
-          </ion-list>
-        </div>
-
-        <br>
-
-        <div class="margin-auto">
-          <ion-list class="sin-padding">
-            <ion-item class="fondo">
-              <ion-select aria-label="Marca" interface="action-sheet" placeholder="Marca" [(ngModel)]="Producto2.marca">
-                <ion-select-option value="Puma">Puma</ion-select-option>
-                <ion-select-option value="Adidas">Adidas</ion-select-option>
-              </ion-select>
-            </ion-item>
-          </ion-list>
-        </div>
-
-        <br>
-
-        <!-- Botón para elegir imagen de la galería -->
-        <ion-button (click)="tomarFoto()">Seleccionar Imagen</ion-button>
-        <!-- Mostrar la imagen seleccionada -->
-        <div class="contenedor-imagen margin-auto centrar">
-          <img *ngIf="imagenPreview" [src]="imagenPreview" alt="Imagen de la zapatilla" class="tamano-imagen">
-        </div>
-
-      </div>
-
-      <br>
-
-      <div class="contenedor-input margin-auto centrar">
-        <ion-button class="color" (click)="modificar()">
-          <ion-icon slot="start" name="Pencil"></ion-icon>
-          Editar
-        </ion-button>
-      </div>
-    </div>
-  </div>
 
 
 </ion-content>

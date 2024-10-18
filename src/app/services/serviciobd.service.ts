@@ -325,6 +325,31 @@ export class ServiciobdService {
     });
   }
 
+   // Método para actualizar el producto en la base de datos
+  actualizarProducto(producto: Producto): Promise<void> {
+    const query = `
+      UPDATE Producto2
+      SET nombre_producto = ?, marca = ?, talla = ?, precio = ?, cantidad = ?, imagen_producto = ?
+      WHERE id_producto = ?`;
+
+    const params = [
+      producto.nombre_producto,
+      producto.marca,
+      producto.talla,
+      producto.precio,
+      producto.cantidad,
+      producto.imagen_producto,
+      producto.id_producto
+    ];
+
+    return this.database.executeSql(query, params).then(() => {
+      console.log('Producto actualizado exitosamente');
+    }).catch(error => {
+      console.error('Error al actualizar el producto:', error);
+      throw error;
+    });
+  }
+
   // Método para ejecutar consultas SQL
   async executeQuery(query: string, params: any[] = []): Promise<any> {
     return new Promise((resolve, reject) => {

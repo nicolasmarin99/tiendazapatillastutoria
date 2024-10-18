@@ -44,7 +44,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/listacomprasad/listacomprasad.module').then( m => m.ListacomprasadPageModule)
   },
   {
-    path: 'editarzapa',
+    path: 'editarzapa/:id',
     loadChildren: () => import('./pages/editarzapa/editarzapa.module').then( m => m.EditarzapaPageModule)
   },
   {
