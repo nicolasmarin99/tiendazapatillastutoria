@@ -105,7 +105,7 @@
     <ion-item *ngFor="let producto of productos">
       <ion-card>
         <!-- Muestra la imagen del producto si existe, de lo contrario, usa una imagen por defecto -->
-        <img class="imagen" *ngIf="producto.imagen_producto" [src]="producto.imagen_producto" alt="Imagen del producto" />
+        <img class="imagen" *ngIf="producto.imagen_producto" [src]="producto.imagen_producto" alt="Imagen del producto" (click)="irADetalleProducto(producto.id_producto)" />
       
         <ion-card-header>
           <!-- Título de la tarjeta con el nombre del producto -->

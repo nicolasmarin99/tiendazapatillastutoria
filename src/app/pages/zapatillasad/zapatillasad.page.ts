@@ -66,6 +66,11 @@ export class ZapatillasadPage implements OnInit {
     });
   }
 
+    // Función para redirigir a la página de detalles del producto
+    irADetalleProducto(id_producto: any): void {
+      this.router.navigate(['/producto', id_producto]);
+  }
+
   irProducto(){
     this.router.navigate(['/producto'])
   }

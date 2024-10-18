@@ -12,14 +12,24 @@
 
   <hr>
 
-  <div *ngIf="producto">
-    <img [src]="producto.imagen_producto" alt="{{ producto.nombre_producto }}" />
-    <h2>{{ producto.nombre_producto }}</h2>
-    <p>Marca: {{ producto.marca }}</p>
-    <p>Talla: {{ producto.talla }}</p>
-    <p>Precio: {{ producto.precio }}</p>
-    <p>Cantidad: {{ producto.cantidad }}</p>
-  </div>
+  <ion-card>
+    <!-- Muestra la imagen del producto si existe, de lo contrario, usa una imagen por defecto -->
+    <img class="imagen" *ngIf="producto.imagen_producto" [src]="producto.imagen_producto" alt="Imagen del producto" />
+    
+    <ion-card-header>
+      <!-- Título de la tarjeta con el nombre del producto -->
+      <ion-card-title>{{ producto.nombre_producto }}</ion-card-title>
+      <!-- Subtítulo de la tarjeta, por ejemplo, puedes usar la marca o cualquier otra propiedad -->
+      <ion-card-subtitle>Marca: {{ producto.marca }}</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <!-- Detalles adicionales del producto en el contenido de la tarjeta -->
+      <p>Talla: {{ producto.talla }}</p>
+      <p>Precio: ${{ producto.precio }}</p>
+      <p>Cantidad: {{ producto.cantidad }}</p>
+    </ion-card-content>
+  </ion-card>
 
 </ion-content>
 
