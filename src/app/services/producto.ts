@@ -6,4 +6,5 @@ export class Producto {
     precio:any;
     cantidad:any;
     imagen_producto:any;
+    cantidadSeleccionada: number = 0;  // Nueva propiedad
 }

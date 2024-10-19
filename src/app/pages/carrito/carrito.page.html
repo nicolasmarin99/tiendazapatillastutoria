@@ -4,29 +4,40 @@
 
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Carrito de Compras</ion-title>
+  </ion-toolbar>
+</ion-header>
 
-  <hr>
-  
-  <app-logo></app-logo>
+<ion-content>
+  <!-- Mostrar mensaje si el carrito está vacío -->
+  <ion-card *ngIf="carrito.length === 0">
+    <ion-card-header>
+      <ion-card-title>Tu carrito está vacío</ion-card-title>
+    </ion-card-header>
+  </ion-card>
 
-  <hr>
-
-  <br>
-
-  <ion-list>
-    <ion-item *ngFor="let producto of productosCarrito">
+  <!-- Listar los productos en el carrito -->
+  <ion-list *ngIf="carrito.length > 0">
+    <ion-item *ngFor="let producto of carrito">
       <ion-thumbnail slot="start">
-        <img [src]="producto.imagen_producto" alt="Imagen del producto"/>
+        <img [src]="producto.imagen_producto" alt="Imagen del producto" />
       </ion-thumbnail>
       <ion-label>
         <h2>{{ producto.nombre_producto }}</h2>
         <p>Marca: {{ producto.marca }}</p>
         <p>Talla: {{ producto.talla }}</p>
         <p>Precio: ${{ producto.precio }}</p>
+        <p>Cantidad: {{ producto.cantidadSeleccionada }}</p>
       </ion-label>
     </ion-item>
   </ion-list>
+
+  <!-- Botón para finalizar la compra -->
+  <ion-button expand="full" (click)="finalizarCompra()">
+    Finalizar compra
+  </ion-button>
 </ion-content>
 
 <br>

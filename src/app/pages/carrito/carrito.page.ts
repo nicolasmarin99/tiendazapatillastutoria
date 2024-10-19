@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { ServiciobdService } from 'src/app/services/serviciobd.service';
 import {Producto} from 'src/app/services/producto'
+import { CarritoService } from 'src/app/services/carrito.service'; // Importa el servicio
 
 @Component({
   selector: 'app-carrito',
@@ -13,12 +14,12 @@ export class CarritoPage implements OnInit {
 
   alertButtons = ['Cerrar'];
   usuarioRol: number | null = null; // Aquí se almacenará el rol del usuario
-  productosCarrito: Producto[] = []; // Array para almacenar los productos en el carrito
+  carrito: Producto[] = []; // Aquí se almacenarán los productos del carrito
   
-  constructor(private router: Router,private alertController: AlertController,private dbService:ServiciobdService) { }
+  constructor(private router: Router,private alertController: AlertController,private dbService:ServiciobdService,private carritoService: CarritoService,) { }
 
   ngOnInit() {
-    this.cargarCarrito();
+    this.carrito = this.carritoService.obtenerCarrito();
   }
 
   async presentAlert(titulo: string, msj: string) {
@@ -40,9 +41,10 @@ export class CarritoPage implements OnInit {
       });
     }
   }
-  cargarCarrito() {
-    const carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
-    this.productosCarrito = carrito; // Asignar los productos del carrito a la variable
+  
+  finalizarCompra() {
+    // Implementar la lógica para finalizar la compra
+    console.log('Compra finalizada');
   }
 
   comprar(){

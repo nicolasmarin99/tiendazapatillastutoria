@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { ServiciobdService } from 'src/app/services/serviciobd.service';
 import { Producto } from 'src/app/services/producto';
+import { CarritoService } from 'src/app/services/carrito.service'; // Importa el servicio
 
 @Component({
   selector: 'app-producto',
@@ -21,7 +22,8 @@ export class ProductoPage implements OnInit {
     private router: ActivatedRoute,
     private alertController: AlertController,
     private dbService: ServiciobdService,
-    private navRouter: Router
+    private navRouter: Router,
+    private carritoService: CarritoService
   ) {
     this.producto = new Producto();
   }
@@ -63,27 +65,19 @@ export class ProductoPage implements OnInit {
   }
 
   comprarProducto() {
-    // Validar si la cantidad seleccionada es válida
-    if (this.cantidadSeleccionada <= 0) {
-      this.mensajeError = 'La cantidad debe ser mayor a 0';
-      return;
+    // Validar la cantidad seleccionada
+    if (this.cantidadSeleccionada > 0 && this.cantidadSeleccionada <= this.producto.cantidad) {
+      
+      // Añadir el producto al carrito con la cantidad seleccionada
+      const productoCarrito = { ...this.producto, cantidadSeleccionada: this.cantidadSeleccionada };
+      this.carritoService.agregarProducto(productoCarrito);
+  
+      // Mostrar una alerta o navegar al carrito
+      this.mostrarAlerta('Producto añadido al carrito');
+      this.navRouter.navigate(['/carrito']);
+    } else {
+      this.mostrarAlerta('Cantidad no válida');
     }
-    if (this.cantidadSeleccionada > this.producto.cantidad) {
-      this.mensajeError = 'No hay suficiente cantidad disponible';
-      return;
-    }
-
-    // Si la cantidad es válida, proceder con la compra
-    this.dbService.actualizarCantidadProducto(this.producto.id_producto, this.cantidadSeleccionada)
-      .then(() => {
-        this.producto.cantidad -= this.cantidadSeleccionada; // Reducir la cantidad en el objeto local
-        this.mostrarAlerta('Producto añadido al carrito');
-        this.mensajeError = ''; // Limpiar cualquier mensaje de error
-      })
-      .catch(error => {
-        console.error('Error al actualizar la cantidad:', error);
-        this.mostrarAlerta('Error al añadir el producto al carrito');
-      });
   }
 
   editarProducto() {

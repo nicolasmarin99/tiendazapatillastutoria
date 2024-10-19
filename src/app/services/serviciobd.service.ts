@@ -267,7 +267,9 @@ export class ServiciobdService {
                     talla: res.rows.item(i).talla,
                     precio: res.rows.item(i).precio,
                     cantidad: res.rows.item(i).cantidad,
-                    imagen_producto: res.rows.item(i).imagen_producto
+                    imagen_producto: res.rows.item(i).imagen_producto,
+                    cantidadSeleccionada:res.rows.item(i).cantidadSeleccionada
+
                 });
                 
                 this.presentAlert("2", "push");
