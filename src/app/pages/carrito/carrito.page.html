@@ -12,95 +12,25 @@
 
   <hr>
 
-  <div class="contenedor-cards bordear">
-    <hr>
-      <div class="margin-auto centrar"><img src="assets/zapatilla.png" alt="" class="tamano-zapatilla bordear"></div>
-        <div class="contenedor-letras-card margin-auto">
-          <p class="letras-negrita2">RDB Game Hombre Celeste</p>
-          <p class="letras-negrita2">Puma</p>
-        </div>
-        <div class="contenedor-flex contenedor-info margin-auto espacio-precio">
-          <p class="letras-negrita tamano-letras">Talla:</p>
-          <p class="tamano-letras letras-negrita2">&nbsp;9 (27 cms)</p>
-        </div>
-        
-        <div class="contenedor-flex contenedor-info margin-auto espacio-precio">
-          <p class="letras-negrita tamano-letras">Cantidad:</p>
-          <p class="tamano-letras letras-negrita2">&nbsp; 1 Unidad</p>
-        </div>
+  <br>
 
-        <div class="contenedor-flex contenedor-info margin-auto espacio-precio">
-          <p class="letras-negrita tamano-letras">Total:</p>
-          <p class="tamano-letras letras-negrita2">&nbsp;$33.590</p>
-        </div>
-
-        <div class="contenedor-quitar margin-auto margin-l">
-          <ion-button class="color">
-            <ion-icon slot="start" name="trash"></ion-icon>
-            Quitar
-          </ion-button>
-        </div>
-  </div>
-
-  <div class="contenedor-cards bordear">
-    <hr>
-      <div class="margin-auto centrar"><img src="assets/zapatilla.png" alt="" class="tamano-zapatilla bordear"></div>
-        <div class="contenedor-letras-card margin-auto">
-          <p class="letras-negrita2">RDB Game Hombre Celeste</p>
-          <p class="letras-negrita2">Puma</p>
-        </div>
-        <div class="contenedor-flex contenedor-info margin-auto espacio-precio">
-          <p class="letras-negrita tamano-letras">Talla:</p>
-          <p class="tamano-letras letras-negrita2">&nbsp;10 (28 cms)</p>
-        </div>
-        
-        <div class="contenedor-flex contenedor-info margin-auto espacio-precio">
-          <p class="letras-negrita tamano-letras">Cantidad:</p>
-          <p class="tamano-letras letras-negrita2">&nbsp; 3 Unidad</p>
-        </div>
-
-        <div class="contenedor-flex contenedor-info margin-auto espacio-precio">
-          <p class="letras-negrita tamano-letras">Total:</p>
-          <p class="tamano-letras letras-negrita2">&nbsp;$33.590</p>
-        </div>
-
-        <div class="contenedor-quitar margin-auto margin-l">
-          <ion-button class="color">
-            <ion-icon slot="start" name="trash"></ion-icon>
-            Quitar
-          </ion-button>
-        </div>
-  </div>
-
-  <hr>
-
-  <div class="contenedor-total margin-auto bordear">
-    <hr>
-
-      <div class="contenedor-compra margin-auto">
-        <div class="contenedor-flex espacio-precio">
-          <p class="letras-negrita tamano-letras ">Subtotal:</p>
-          <p class="tamano-letras letras-negrita2 ">&nbsp;$112.908</p>
-        </div>
-        <div class="contenedor-flex espacio-precio">
-          <p class="letras-negrita tamano-letras ">IVA:</p>
-          <p class="tamano-letras letras-negrita2 ">&nbsp;$21.452</p>
-        </div>
-        <div class="contenedor-flex espacio-precio">
-          <p class="letras-negrita tamano-letras ">Total:</p>
-          <p class="tamano-letras letras-negrita2 precio">&nbsp;$134.360</p>
-        </div>
-  
-        <div class="centrar margin-auto">
-          <ion-button class="boton-compra" (click)="comprar()">
-            <ion-icon slot="start" name="cart"></ion-icon>
-            Comprar
-          </ion-button>
-        </div>
-      </div>
-  </div>
-
+  <ion-list>
+    <ion-item *ngFor="let producto of productosCarrito">
+      <ion-thumbnail slot="start">
+        <img [src]="producto.imagen_producto" alt="Imagen del producto"/>
+      </ion-thumbnail>
+      <ion-label>
+        <h2>{{ producto.nombre_producto }}</h2>
+        <p>Marca: {{ producto.marca }}</p>
+        <p>Talla: {{ producto.talla }}</p>
+        <p>Precio: ${{ producto.precio }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>
+
+<br>
+
 
 <ion-footer>
 
