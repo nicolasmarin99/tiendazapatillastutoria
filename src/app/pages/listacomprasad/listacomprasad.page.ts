@@ -9,10 +9,12 @@ import { ServiciobdService } from 'src/app/services/serviciobd.service';
 })
 export class ListacomprasadPage implements OnInit {
   usuarioRol: number | null = null; // Aquí se almacenará el rol del usuario
+  compras: any[] = []; // Variable para almacenar las compras
 
   constructor(private router: Router,private dbService:ServiciobdService) { }
 
   ngOnInit() {
+    this.cargarCompras(); // Cargar las compras cuando la página se inicializa
   }
 
   ionViewDidEnter() {
@@ -24,6 +26,17 @@ export class ListacomprasadPage implements OnInit {
         console.error('Error al obtener el rol del usuario:', error);
       });
     }
+  }
+
+  cargarCompras() {
+    this.dbService.obtenerComprasConDetalles()
+      .then(compras => {
+        console.log('Compras obtenidas:', compras); // <-- Aquí deberías ver las compras en la consola
+        this.compras = compras;
+      })
+      .catch(error => {
+        console.error('Error al cargar las compras:', error);
+      });
   }
 
   irInicio(){
