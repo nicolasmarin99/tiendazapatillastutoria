@@ -20,7 +20,9 @@ export class CarritoPage implements OnInit {
   constructor(private router: Router,private alertController: AlertController,private dbService:ServiciobdService,private carritoService: CarritoService,) { }
 
   ngOnInit() {
-    this.cargarCarrito();
+     // Cargar el carrito al iniciar la página
+    this.carritoService.cargarCarrito();
+    this.carrito = this.carritoService.obtenerCarrito();
   }
 
   async presentAlert(titulo: string, msj: string) {
@@ -33,6 +35,11 @@ export class CarritoPage implements OnInit {
   }
 
   ionViewDidEnter() {
+    // Opcional: cargar nuevamente el carrito cada vez que entras a la página
+    this.carritoService.cargarCarrito();
+    this.carrito = this.carritoService.obtenerCarrito();
+
+    // Obtener el rol del usuario autenticado (opcional)
     const id_usuario = localStorage.getItem('id_usuario');
     if (id_usuario) {
       this.dbService.obtenerRolUsuario(Number(id_usuario)).then(rol => {
@@ -43,29 +50,34 @@ export class CarritoPage implements OnInit {
     }
   }
 
-  cargarCarrito() {
-    this.carrito = this.carritoService.obtenerCarrito(); // Asegúrate de que este método retorne el carrito
-  }
 
-  guardarCarrito() {
-    localStorage.setItem('carrito', JSON.stringify(this.carrito)); // Guarda el carrito en localStorage
+  // Guardar el carrito en localStorage después de eliminar
+guardarCarrito() {
+  if (this.carrito.length === 0) {
+    localStorage.removeItem('carrito'); // Limpia el localStorage si el carrito está vacío
+  } else {
+    localStorage.setItem('carrito', JSON.stringify(this.carrito)); // Guarda el carrito actualizado
   }
+}
 
+   // Eliminar un producto del carrito
   eliminarProducto(id_producto: number) {
-    // Encuentra el producto que se va a eliminar
     const productoEliminado = this.carrito.find(item => item.id_producto === id_producto);
-    
+
     if (productoEliminado) {
-      // Devuelve la cantidad al producto original en Producto2
-      this.dbService.actualizarCantidadProducto(id_producto, productoEliminado.cantidadSeleccionada)
+      const cantidadRestaurada = productoEliminado.cantidadSeleccionada;
+
+      // Restaurar la cantidad en la base de datos
+      this.dbService.actualizarCantidadProductoPorId(id_producto, productoEliminado.cantidad + cantidadRestaurada)
         .then(() => {
-          // Elimina el producto del carrito
-          this.carrito = this.carrito.filter(item => item.id_producto !== id_producto);
-          this.guardarCarrito(); // Guarda el carrito actualizado
-          // No es necesario llamar a calcularPrecioTotal aquí, ya que el getter precioTotal se actualiza automáticamente
+          // Eliminar el producto del carrito
+          this.carritoService.eliminarProducto(id_producto);
+          this.carrito = this.carritoService.obtenerCarrito(); // Actualizar el carrito visualmente
+          this.presentAlert('Éxito', 'Producto eliminado del carrito');
         })
         .catch(error => {
           console.error('Error al actualizar la cantidad al eliminar el producto:', error);
+          this.presentAlert('Error', 'Error al eliminar el producto del carrito');
         });
     }
   }

@@ -10,9 +10,38 @@ private carrito: Producto[] = [];
 constructor() { }
 
   // Agrega un producto al carrito
-agregarProducto(producto: Producto) {
-    this.carrito.push(producto);
-}
+  agregarProducto(producto: Producto) {
+    const productoExistente = this.carrito.find(item => item.id_producto === producto.id_producto);
+  
+    if (productoExistente) {
+      // Actualiza la cantidad seleccionada del producto en el carrito
+      productoExistente.cantidadSeleccionada = producto.cantidadSeleccionada;
+    } else {
+      // Agrega el producto al carrito si no existe
+      this.carrito.push(producto);
+    }
+  
+    // Guarda el carrito en el localStorage
+    this.guardarCarrito();
+  }
+
+  // Método para guardar el carrito en el localStorage
+  guardarCarrito() {
+    if (this.carrito.length === 0) {
+      localStorage.removeItem('carrito'); // Limpia el localStorage si el carrito está vacío
+    } else {
+      localStorage.setItem('carrito', JSON.stringify(this.carrito)); // Guarda el carrito en localStorage
+    }
+  }
+
+  cargarCarrito() {
+    const carritoGuardado = localStorage.getItem('carrito');
+    if (carritoGuardado) {
+      this.carrito = JSON.parse(carritoGuardado);
+    } else {
+      this.carrito = [];
+    }
+  }
 
   // Devuelve la lista de productos en el carrito
 obtenerCarrito(): Producto[] {
