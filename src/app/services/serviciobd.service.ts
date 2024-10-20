@@ -501,6 +501,44 @@ export class ServiciobdService {
     }
   }
 
+  async obtenerComprasUsuario(id_usuario: number): Promise<any[]> {
+    try {
+      const query = `
+        SELECT Compra.id_compra, Compra.fecha_compra, Compra.precio_total, Usuario.nombre_usuario
+        FROM Compra
+        JOIN Usuario ON Compra.id_usuario = Usuario.id_usuario
+        WHERE Compra.id_usuario = ?
+      `;
+      const res = await this.database.executeSql(query, [id_usuario]);
+  
+      let compras: any[] = [];
+      for (let i = 0; i < res.rows.length; i++) {
+        const compra = res.rows.item(i);
+  
+        // Obtener detalles de la compra
+        const queryDetalles = `
+          SELECT Producto2.nombre_producto, DetalleCompra.cantidad, DetalleCompra.talla, DetalleCompra.precio_unitario
+          FROM DetalleCompra
+          JOIN Producto2 ON DetalleCompra.id_producto = Producto2.id_producto
+          WHERE DetalleCompra.id_compra = ?
+        `;
+        const resDetalles = await this.database.executeSql(queryDetalles, [compra.id_compra]);
+        
+        const detalles = [];
+        for (let j = 0; j < resDetalles.rows.length; j++) {
+          detalles.push(resDetalles.rows.item(j));
+        }
+  
+        compras.push({ ...compra, detalles });
+      }
+  
+      return compras;
+    } catch (error) {
+      console.error('Error al obtener las compras del usuario:', error);
+      throw error;
+    }
+  }
+
 }
 
 

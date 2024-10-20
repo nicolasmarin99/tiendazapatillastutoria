@@ -10,44 +10,33 @@
     
   <hr>
 
-  <div class="contenedor-cards">
-    <hr>
-      <div class="contenedor-flex contenedor-info margin-auto centrar-justify">
-        <p class="letras-negrita tamano-letras">Fecha de compra:</p>
-        <p class="letras-negrita2 tamano-letras color-negro">&nbsp;28/08/2024</p>
-      </div>
-      <div class="margin-auto centrar"><img src="assets/zapatilla.png" alt="" class="tamano-zapatilla"></div>
-        <div class="contenedor-letras-card margin-auto">
-          <p class="letras-negrita2">RDB Game Hombre Celeste</p>
-          <p class="letras-negrita2">Puma</p>
-        </div>
-        <div class="contenedor-flex contenedor-info margin-auto espacio-precio">
-          <p class="letras-negrita tamano-letras">Talla:</p>
-          <p class="tamano-letras letras-negrita2">&nbsp;9 (27 cms)</p>
-        </div>
-        
-        <div class="contenedor-flex contenedor-info margin-auto espacio-precio">
-          <p class="letras-negrita tamano-letras">Cantidad:</p>
-          <p class="tamano-letras letras-negrita2">&nbsp; 1 Unidad</p>
-        </div>
+   <!-- Verifica que el array de compras tiene elementos -->
+   <ion-card *ngIf="compras.length === 0">
+    <ion-card-header>
+      <ion-card-title>No hay compras registradas</ion-card-title>
+    </ion-card-header>
+  </ion-card>
 
-        <div class="contenedor-flex contenedor-info margin-auto espacio-precio">
-          <p class="letras-negrita tamano-letras">Dirección:</p>
-          <p class="tamano-letras letras-negrita2">&nbsp;Calle real 343</p>
-        </div>
-
-        <div class="contenedor-flex contenedor-info margin-auto espacio-precio">
-          <p class="letras-negrita tamano-letras">Llega en:</p>
-          <p class="tamano-letras letras-negrita2">&nbsp;1-3 días habiles</p>
-        </div>
-
-        <div class="contenedor-flex contenedor-info margin-auto espacio-precio">
-          <p class="letras-negrita tamano-letras">Total:</p>
-          <p class="tamano-letras letras-negrita2">&nbsp;$33.590</p>
-        </div>
-        
+  <!-- Mostrar las compras del usuario logueado -->
+  <ion-card *ngFor="let compra of compras">
+    <ion-card-header>
+      <ion-card-title>Compra realizada por {{ compra.nombre_usuario }}</ion-card-title>
+      <ion-card-subtitle>Fecha: {{ compra.fecha_compra }}</ion-card-subtitle>
+      <ion-card-subtitle>Total: ${{ compra.precio_total }}</ion-card-subtitle>
+    </ion-card-header>
     
-  </div>
+    <ion-card-content>
+      <!-- Mostrar los detalles de los productos -->
+      <ion-item *ngFor="let detalle of compra.detalles">
+        <ion-label>
+          Producto: {{ detalle.nombre_producto }}<br>
+          Cantidad: {{ detalle.cantidad }}<br>
+          Talla: {{ detalle.talla }}<br>
+          Precio unitario: ${{ detalle.precio_unitario }}
+        </ion-label>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
 
 </ion-content>
 
