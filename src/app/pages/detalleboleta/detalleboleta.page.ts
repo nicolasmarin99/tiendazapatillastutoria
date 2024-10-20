@@ -17,6 +17,8 @@ export class DetalleboletaPage implements OnInit {
   numeroDomicilio: string = '';
   productosComprados: any[] = [];
   mensajeAgradecimiento: string = '¡Muchas gracias por su compra!';
+  precioTotal: number = 0; // Variable para el precio total
+
   constructor(private router:Router, private dbService:ServiciobdService,private alertController: AlertController) { }
 
   ngOnInit() {
@@ -43,12 +45,20 @@ export class DetalleboletaPage implements OnInit {
       // Obtener los productos comprados en la última compra
       this.dbService.obtenerUltimaCompraConDetalles(Number(id_usuario))
         .then(productos => {
-          this.productosComprados = productos;
+          this.productosComprados = productos; // Asignar los productos a la variable productosComprados
+          this.calcularPrecioTotal(); // Calcular el precio total de la compra
         })
         .catch(error => {
           console.error('Error al obtener los detalles de la compra:', error);
         });
     }
+  }
+
+  // Método para calcular el precio total de los productos comprados
+  calcularPrecioTotal() {
+    this.precioTotal = this.productosComprados.reduce((total, producto) => {
+      return total + (producto.precio_unitario * producto.cantidad);
+    }, 0);
   }
 
   ionViewDidEnter() {
