@@ -28,4 +28,10 @@ limpiarCarrito() {
 eliminarProducto(id_producto: number) {
     this.carrito = this.carrito.filter(item => item.id_producto !== id_producto); // Guarda el carrito actualizado en localStorage o en la BD, si es necesario
 }
+
+// Método para calcular el total del carrito
+calcularTotal(): number {
+    return this.carrito.reduce((total, producto) => total + (producto.precio * producto.cantidadSeleccionada), 0);
+}
+
 }

@@ -31,9 +31,14 @@
       <p>Cantidad seleccionada: {{ producto.cantidadSeleccionada }}</p>
   
       <!-- Botón de eliminar producto -->
-      <ion-button color="danger" (click)="eliminarProducto(producto)">Eliminar</ion-button>
+      <ion-button color="danger" (click)="eliminarProducto(producto.id_producto)">Eliminar</ion-button>
     </ion-card-content>
   </ion-card>
+
+  <!-- Mostrar el precio total -->
+  <div class="precio-total">
+    <p>Precio Total: {{ precioTotal2 }}</p>
+  </div>
 
   <!-- Botón para finalizar la compra -->
   <ion-button expand="full" (click)="finalizarCompra()">

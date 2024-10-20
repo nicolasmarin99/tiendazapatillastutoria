@@ -73,31 +73,24 @@ export class ProductoPage implements OnInit {
   }
 
   comprarProducto() {
-    // Validar la cantidad seleccionada
+    // Primero, verifica si hay suficiente cantidad
     if (this.cantidadSeleccionada > 0 && this.cantidadSeleccionada <= this.producto.cantidad) {
-      // Restar la cantidad seleccionada de la cantidad actual en el inventario
-      const nuevaCantidad = this.producto.cantidad - this.cantidadSeleccionada;
-      
-      // Actualizar la cantidad en la base de datos
-      this.dbService.actualizarCantidadProductoPorId(this.producto.id_producto, nuevaCantidad)
+      this.dbService.actualizarCantidadProducto(this.producto.id_producto, this.cantidadSeleccionada)
         .then(() => {
-          // Actualizar la cantidad localmente después de la actualización en la base de datos
-          this.producto.cantidad = nuevaCantidad;
-  
-          // Añadir el producto al carrito con la cantidad seleccionada
-          const productoCarrito = { ...this.producto, cantidadSeleccionada: this.cantidadSeleccionada };
-          this.carritoService.agregarProducto(productoCarrito);
-  
-          // Mostrar la alerta de confirmación
-          this.mostrarAlerta('Producto añadido al carrito');
-          this.navRouter.navigate(['/carrito']);
+          this.producto.cantidad -= this.cantidadSeleccionada; // Reducir la cantidad en el objeto local
+          
+          // Crear un nuevo objeto Producto con la cantidad seleccionada
+          const productoAAgregar = { ...this.producto, cantidadSeleccionada: this.cantidadSeleccionada };
+          this.carritoService.agregarProducto(productoAAgregar); // Agrega el producto al carrito
+          
+          this.mostrarAlerta('Producto añadido al carrito'); // Muestra la alerta de confirmación
         })
         .catch(error => {
           console.error('Error al actualizar la cantidad:', error);
-          this.mostrarAlerta('Error al añadir el producto al carrito');
+          this.mostrarAlerta('Error al añadir el producto al carrito'); // Muestra alerta de error
         });
     } else {
-      this.mostrarAlerta('Cantidad no válida');
+      this.mostrarAlerta('Cantidad inválida. Asegúrate de que sea mayor que 0 y no exceda la cantidad disponible.'); // Alerta si la cantidad es inválida
     }
   }
 

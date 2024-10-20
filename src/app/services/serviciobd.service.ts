@@ -327,11 +327,14 @@ export class ServiciobdService {
     });
   }
   
-  actualizarCantidadProducto(id_producto: number, cantidadSeleccionada: number) {
-    return this.database.executeSql(
-      `UPDATE Producto2 SET cantidad = cantidad - ? WHERE id_producto = ?`, 
-      [cantidadSeleccionada, id_producto]
-    );
+  actualizarCantidadProducto(id_producto: number, cantidadSeleccionada: number): Promise<void> {
+    // Aquí implementas la lógica para actualizar la cantidad en la base de datos
+    return new Promise<void>((resolve, reject) => {
+      const query = 'UPDATE Producto2 SET cantidad = cantidad - ? WHERE id_producto = ?';
+      this.database.executeSql(query, [cantidadSeleccionada, id_producto])
+        .then(() => resolve()) // Aquí resolve() no necesita argumentos
+        .catch((error) => reject(error));
+    });
   }
 
   actualizarCantidadProductoPorId(id_producto: number, nuevaCantidad: number): Promise<void> {
