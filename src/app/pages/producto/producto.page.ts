@@ -67,14 +67,27 @@ export class ProductoPage implements OnInit {
   comprarProducto() {
     // Validar la cantidad seleccionada
     if (this.cantidadSeleccionada > 0 && this.cantidadSeleccionada <= this.producto.cantidad) {
+      // Restar la cantidad seleccionada de la cantidad actual en el inventario
+      const nuevaCantidad = this.producto.cantidad - this.cantidadSeleccionada;
       
-      // Añadir el producto al carrito con la cantidad seleccionada
-      const productoCarrito = { ...this.producto, cantidadSeleccionada: this.cantidadSeleccionada };
-      this.carritoService.agregarProducto(productoCarrito);
+      // Actualizar la cantidad en la base de datos
+      this.dbService.actualizarCantidadProductoPorId(this.producto.id_producto, nuevaCantidad)
+        .then(() => {
+          // Actualizar la cantidad localmente después de la actualización en la base de datos
+          this.producto.cantidad = nuevaCantidad;
   
-      // Mostrar una alerta o navegar al carrito
-      this.mostrarAlerta('Producto añadido al carrito');
-      this.navRouter.navigate(['/carrito']);
+          // Añadir el producto al carrito con la cantidad seleccionada
+          const productoCarrito = { ...this.producto, cantidadSeleccionada: this.cantidadSeleccionada };
+          this.carritoService.agregarProducto(productoCarrito);
+  
+          // Mostrar la alerta de confirmación
+          this.mostrarAlerta('Producto añadido al carrito');
+          this.navRouter.navigate(['/carrito']);
+        })
+        .catch(error => {
+          console.error('Error al actualizar la cantidad:', error);
+          this.mostrarAlerta('Error al añadir el producto al carrito');
+        });
     } else {
       this.mostrarAlerta('Cantidad no válida');
     }

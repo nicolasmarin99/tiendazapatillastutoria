@@ -334,6 +334,17 @@ export class ServiciobdService {
     );
   }
 
+  actualizarCantidadProductoPorId(id_producto: number, nuevaCantidad: number): Promise<void> {
+    const query = `UPDATE Producto2 SET cantidad = ? WHERE id_producto = ?`;
+    return this.database.executeSql(query, [nuevaCantidad, id_producto])
+      .then(() => {
+        console.log('Cantidad actualizada correctamente.');
+      })
+      .catch(error => {
+        console.error('Error al actualizar la cantidad en la base de datos:', error);
+      });
+  }
+
    // Método para actualizar el producto en la base de datos
   actualizarProducto(producto: Producto): Promise<void> {
     const query = `

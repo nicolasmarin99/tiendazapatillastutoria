@@ -19,20 +19,21 @@
   </ion-card>
 
   <!-- Listar los productos en el carrito -->
-  <ion-list *ngIf="carrito.length > 0">
-    <ion-item *ngFor="let producto of carrito">
-      <ion-thumbnail slot="start">
-        <img [src]="producto.imagen_producto" alt="Imagen del producto" />
-      </ion-thumbnail>
-      <ion-label>
-        <h2>{{ producto.nombre_producto }}</h2>
-        <p>Marca: {{ producto.marca }}</p>
-        <p>Talla: {{ producto.talla }}</p>
-        <p>Precio: ${{ producto.precio }}</p>
-        <p>Cantidad: {{ producto.cantidadSeleccionada }}</p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
+  <ion-card *ngFor="let producto of carrito">
+    <ion-card-header>
+      <ion-card-title>{{ producto.nombre_producto }}</ion-card-title>
+      <ion-card-subtitle>Marca: {{ producto.marca }}</ion-card-subtitle>
+    </ion-card-header>
+  
+    <ion-card-content>
+      <p>Talla: {{ producto.talla }}</p>
+      <p>Precio: ${{ producto.precio }}</p>
+      <p>Cantidad seleccionada: {{ producto.cantidadSeleccionada }}</p>
+  
+      <!-- Botón de eliminar producto -->
+      <ion-button color="danger" (click)="eliminarProducto(producto)">Eliminar</ion-button>
+    </ion-card-content>
+  </ion-card>
 
   <!-- Botón para finalizar la compra -->
   <ion-button expand="full" (click)="finalizarCompra()">

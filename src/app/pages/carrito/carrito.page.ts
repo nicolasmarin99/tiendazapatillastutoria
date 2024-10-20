@@ -41,6 +41,26 @@ export class CarritoPage implements OnInit {
       });
     }
   }
+
+  eliminarProducto(producto: Producto) {
+    // Sumar la cantidad seleccionada al inventario
+    const cantidadRestaurada = producto.cantidad + producto.cantidadSeleccionada;
+    
+    // Actualizar la cantidad en la base de datos
+    this.dbService.actualizarCantidadProductoPorId(producto.id_producto, cantidadRestaurada)
+      .then(() => {
+        // Eliminar el producto del carrito visualmente
+        this.carritoService.eliminarProducto(producto.id_producto);
+  
+        // Refrescar la lista del carrito
+        this.carrito = this.carritoService.obtenerCarrito();
+  
+        console.log('Producto eliminado y cantidad restaurada.');
+      })
+      .catch(error => {
+        console.error('Error al restaurar la cantidad en la base de datos:', error);
+      });
+  }
   
   finalizarCompra() {
     // Implementar la lógica para finalizar la compra
