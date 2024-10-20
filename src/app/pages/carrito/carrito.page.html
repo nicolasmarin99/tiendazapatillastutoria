@@ -40,12 +40,9 @@
     <p>Precio Total: {{ precioTotal2 }}</p>
   </div>
 
-  <!-- Botón para finalizar la compra -->
-  <ion-button expand="full" (click)="finalizarCompra()" [disabled]="carrito.length === 0">
-    Finalizar compra
-  </ion-button>
-  <ion-button expand="full" (click)="irapago()">
-    ir a pago
+  <!-- Botón para ir a la página de pago -->
+  <ion-button expand="full" (click)="irAPago()" [disabled]="carrito.length === 0">
+  Ir a pago
   </ion-button>
 </ion-content>
 

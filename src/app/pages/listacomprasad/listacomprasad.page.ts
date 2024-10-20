@@ -28,10 +28,23 @@ export class ListacomprasadPage implements OnInit {
     }
   }
 
+  ionViewWillEnter() {
+    this.cargarCompras(); // Recargar las compras cuando se entre a la página
+
+    const id_usuario = localStorage.getItem('id_usuario');
+    if (id_usuario) {
+      this.dbService.obtenerRolUsuario(Number(id_usuario)).then(rol => {
+        this.usuarioRol = rol;
+      }).catch(error => {
+        console.error('Error al obtener el rol del usuario:', error);
+      });
+    }
+  }
+
   cargarCompras() {
     this.dbService.obtenerComprasConDetalles()
       .then(compras => {
-        console.log('Compras obtenidas:', compras); // <-- Aquí deberías ver las compras en la consola
+        console.log('Compras obtenidas:', compras); // Verificar las compras obtenidas en la consola
         this.compras = compras;
       })
       .catch(error => {

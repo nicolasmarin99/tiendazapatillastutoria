@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { ServiciobdService } from 'src/app/services/serviciobd.service';
+import { CarritoService } from 'src/app/services/carrito.service'; // Importar el servicio del carrito
 
 @Component({
   selector: 'app-pago',
@@ -15,9 +16,14 @@ export class PagoPage implements OnInit {
   fechaVencimiento: string = '';
   cvv: string = '';
   mostrarErrores: boolean = false; // Controla si se muestran los mensajes de error
-  constructor(private router:Router, private dbService:ServiciobdService,private alertController: AlertController) { }
+  carrito: any[] = []; // Aquí se almacenarán los productos del carrito
+  precioTotal: number = 0; // Precio total calculado del carrito
+  constructor(private router:Router, private dbService:ServiciobdService,private alertController: AlertController, private carritoService: CarritoService) { }
 
   ngOnInit() {
+    // Cargar los productos del carrito y calcular el precio total
+    this.carrito = this.carritoService.obtenerCarrito();
+    this.precioTotal = this.carritoService.calcularTotal();
   }
 
   // Validación del nombre del titular
@@ -26,7 +32,7 @@ export class PagoPage implements OnInit {
   }
 
    // Validación del número de tarjeta
-   numeroTarjetaValido(): boolean {
+  numeroTarjetaValido(): boolean {
     const regexNumeros = /^[0-9]{16}$/;
     return regexNumeros.test(this.numeroTarjeta);
   }
@@ -53,14 +59,37 @@ export class PagoPage implements OnInit {
     // Mostrar los mensajes de error si la validación falla
     this.mostrarErrores = true;
 
-    // Si el formulario no es válido, no continuar
+    // Validar el formulario de pago antes de continuar
     if (!this.formularioValido()) {
       this.presentAlert('Error', 'Por favor, completa correctamente todos los campos.');
       return;
     }
 
-    // Aquí va la lógica para procesar el pago
-    this.presentAlert('Pago Exitoso', 'El pago ha sido procesado con éxito.');
+    const id_usuario = localStorage.getItem('id_usuario');
+    if (!id_usuario) {
+      this.presentAlert('Error', 'No se ha identificado al usuario.');
+      return;
+    }
+
+    const usuarioIdNumber = Number(id_usuario);
+    const fecha = new Date().toISOString(); // Fecha actual
+
+    // Registrar la compra en la base de datos
+    this.dbService.registrarCompra(usuarioIdNumber, fecha, this.precioTotal, this.carrito)
+      .then(() => {
+        // Limpiar el carrito después de la compra
+        this.carritoService.limpiarCarrito();
+
+        // Mostrar alerta de confirmación de compra
+        this.presentAlert('Compra finalizada', 'Su compra ha sido registrada con éxito.');
+
+        // Redirigir a detalleboleta.html
+        this.router.navigate(['/detalleboleta']);
+      })
+      .catch(error => {
+        console.error('Error al registrar la compra:', error);
+        this.presentAlert('Error', 'Hubo un problema al procesar la compra.');
+      });
   }
 
   async presentAlert(header: string, message: string) {

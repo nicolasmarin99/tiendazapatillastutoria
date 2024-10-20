@@ -24,7 +24,7 @@ export class ListadocomprasPage implements OnInit {
     if (id_usuario) {
       this.dbService.obtenerComprasUsuario(Number(id_usuario))
         .then(compras => {
-          this.compras = compras;
+          this.compras = compras; // Aquí se asignan las compras con detalles y nombre de usuario
         })
         .catch(error => {
           console.error('Error al cargar las compras del usuario:', error);
@@ -44,6 +44,20 @@ export class ListadocomprasPage implements OnInit {
       });
     }
   }
+
+  ionViewWillEnter() {
+    this.cargarComprasUsuario(); // Volver a cargar las compras cuando se entre a la página
+
+    const id_usuario = localStorage.getItem('id_usuario');
+    if (id_usuario) {
+      this.dbService.obtenerRolUsuario(Number(id_usuario)).then(rol => {
+        this.usuarioRol = rol;
+      }).catch(error => {
+        console.error('Error al obtener el rol del usuario:', error);
+      });
+    }
+  }
+
   irInicio(){
     this.router.navigate(['/inicio'])
   }

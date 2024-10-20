@@ -438,24 +438,31 @@ export class ServiciobdService {
     }
   }
 
-  async registrarCompra(id_usuario: number, fecha: string, precio_total: number, productos: Producto[]) {
+  async registrarCompra(id_usuario: number, fecha: string, precio_total: number, carrito: any[]) {
     try {
-      // Primero, inserta la compra en la tabla Compra
-      let queryCompra = `INSERT INTO Compra (id_usuario, fecha_compra, precio_total) VALUES (?, ?, ?)`;
-      const resCompra = await this.database.executeSql(queryCompra, [id_usuario, fecha, precio_total]);
+      // Primero, insertar la compra en la tabla Compra
+      const queryCompra = `INSERT INTO Compra (id_usuario, fecha_compra, precio_total) VALUES (?, ?, ?)`;
+      const resultadoCompra = await this.database.executeSql(queryCompra, [id_usuario, fecha, precio_total]);
   
-      const id_compra = resCompra.insertId; // ID de la compra recién creada
+      const id_compra = resultadoCompra.insertId; // Obtener el ID de la compra recién insertada
   
-      // Luego, inserta los productos en DetalleCompra
-      for (let producto of productos) {
-        let queryDetalle = `INSERT INTO DetalleCompra (id_compra, id_producto, cantidad, talla, precio_unitario) VALUES (?, ?, ?, ?, ?)`;
-        await this.database.executeSql(queryDetalle, [id_compra, producto.id_producto, producto.cantidadSeleccionada, producto.talla, producto.precio]);
+      // Luego, insertar los detalles de la compra en la tabla DetalleCompra
+      for (let producto of carrito) {
+        const queryDetalle = `INSERT INTO DetalleCompra (id_compra, id_producto, cantidad, talla, precio_unitario) 
+                              VALUES (?, ?, ?, ?, ?)`;
+        await this.database.executeSql(queryDetalle, [
+          id_compra,
+          producto.id_producto,
+          producto.cantidadSeleccionada,
+          producto.talla,
+          producto.precio
+        ]);
       }
   
-      console.log('Compra y detalles registrados correctamente.');
+      return true; // Devolver éxito
     } catch (error) {
-      console.error('Error al registrar la compra:', error);
-      throw error; // Propagar el error
+      console.error('Error al registrar la compra y los detalles:', error);
+      throw error;
     }
   }
 
@@ -503,36 +510,44 @@ export class ServiciobdService {
 
   async obtenerComprasUsuario(id_usuario: number): Promise<any[]> {
     try {
-      const query = `
-        SELECT Compra.id_compra, Compra.fecha_compra, Compra.precio_total, Usuario.nombre_usuario
-        FROM Compra
-        JOIN Usuario ON Compra.id_usuario = Usuario.id_usuario
-        WHERE Compra.id_usuario = ?
-      `;
-      const res = await this.database.executeSql(query, [id_usuario]);
+      // Obtener las compras del usuario junto con su nombre
+      const queryCompras = `
+        SELECT Compra.*, Usuario.nombre_usuario 
+        FROM Compra 
+        JOIN Usuario ON Compra.id_usuario = Usuario.id_usuario 
+        WHERE Compra.id_usuario = ?`;
+      
+      const resultadoCompras = await this.database.executeSql(queryCompras, [id_usuario]);
   
-      let compras: any[] = [];
-      for (let i = 0; i < res.rows.length; i++) {
-        const compra = res.rows.item(i);
+      let compras = [];
   
-        // Obtener detalles de la compra
+      // Iterar sobre las compras y obtener los detalles de cada una
+      for (let i = 0; i < resultadoCompras.rows.length; i++) {
+        const compra = resultadoCompras.rows.item(i);
+  
+        // Obtener los detalles de la compra
         const queryDetalles = `
-          SELECT Producto2.nombre_producto, DetalleCompra.cantidad, DetalleCompra.talla, DetalleCompra.precio_unitario
-          FROM DetalleCompra
-          JOIN Producto2 ON DetalleCompra.id_producto = Producto2.id_producto
-          WHERE DetalleCompra.id_compra = ?
-        `;
-        const resDetalles = await this.database.executeSql(queryDetalles, [compra.id_compra]);
-        
-        const detalles = [];
-        for (let j = 0; j < resDetalles.rows.length; j++) {
-          detalles.push(resDetalles.rows.item(j));
+          SELECT DetalleCompra.*, Producto2.nombre_producto 
+          FROM DetalleCompra 
+          JOIN Producto2 ON DetalleCompra.id_producto = Producto2.id_producto 
+          WHERE DetalleCompra.id_compra = ?`;
+  
+        const resultadoDetalles = await this.database.executeSql(queryDetalles, [compra.id_compra]);
+  
+        let detalles = [];
+        for (let j = 0; j < resultadoDetalles.rows.length; j++) {
+          detalles.push(resultadoDetalles.rows.item(j));
         }
   
-        compras.push({ ...compra, detalles });
+        // Añadir la compra con su nombre de usuario y detalles
+        compras.push({
+          ...compra,
+          detalles: detalles,
+          nombre_usuario: compra.nombre_usuario // Añadir el nombre del usuario
+        });
       }
   
-      return compras;
+      return compras; // Devolver todas las compras con sus detalles
     } catch (error) {
       console.error('Error al obtener las compras del usuario:', error);
       throw error;

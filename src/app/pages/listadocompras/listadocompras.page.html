@@ -10,7 +10,7 @@
     
   <hr>
 
-   <!-- Verifica que el array de compras tiene elementos -->
+  <!-- Verifica que el array de compras tiene elementos -->
    <ion-card *ngIf="compras.length === 0">
     <ion-card-header>
       <ion-card-title>No hay compras registradas</ion-card-title>
@@ -20,6 +20,7 @@
   <!-- Mostrar las compras del usuario logueado -->
   <ion-card *ngFor="let compra of compras">
     <ion-card-header>
+      <!-- Mostrar el nombre del usuario que realizó la compra -->
       <ion-card-title>Compra realizada por {{ compra.nombre_usuario }}</ion-card-title>
       <ion-card-subtitle>Fecha: {{ compra.fecha_compra }}</ion-card-subtitle>
       <ion-card-subtitle>Total: ${{ compra.precio_total }}</ion-card-subtitle>

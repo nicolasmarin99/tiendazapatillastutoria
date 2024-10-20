@@ -143,7 +143,12 @@ guardarCarrito() {
     this.router.navigate(['/inicio'])
   }
 
-  irapago(){
-    this.router.navigate(['/pago'])
+  irAPago() {
+    if (this.carrito.length === 0) {
+      this.presentAlert('Carrito vacío', 'Debe haber al menos un producto en el carrito para proceder al pago.');
+      return;
+    }
+    // Redirigir a la página de pago
+    this.router.navigate(['/pago']);
   }
 }
