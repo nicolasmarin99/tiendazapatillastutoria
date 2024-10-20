@@ -90,7 +90,11 @@ const routes: Routes = [
   {
     path: '**',
     loadChildren: () => import('./pages/notfound/notfound.module').then( m => m.NotfoundPageModule)
+  },  {
+    path: 'scannerqr',
+    loadChildren: () => import('./pages/scannerqr/scannerqr.module').then( m => m.ScannerqrPageModule)
   },
+
   
 
   

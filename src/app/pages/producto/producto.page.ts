@@ -4,6 +4,7 @@ import { AlertController } from '@ionic/angular';
 import { ServiciobdService } from 'src/app/services/serviciobd.service';
 import { Producto } from 'src/app/services/producto';
 import { CarritoService } from 'src/app/services/carrito.service'; // Importa el servicio
+import { BarcodeScanner } from '@capacitor-community/barcode-scanner'; // Importar el plugin de escaneo
 
 @Component({
   selector: 'app-producto',
@@ -43,14 +44,17 @@ export class ProductoPage implements OnInit {
     }
   }
 
-  async mostrarAlerta(mensaje: string) {
+  async mostrarAlerta(header: string, message: string) {
     const alert = await this.alertController.create({
-      header: 'Confirmación',
-      message: mensaje,
+      header: header,   // Título de la alerta
+      message: message, // Mensaje de la alerta
       buttons: ['OK'],
     });
+  
     await alert.present();
   }
+
+  
 
   obtenerProductoPorId(id: string) {
     this.dbService.obtenerProductoPorId(id).then((data: Producto) => {
@@ -83,15 +87,38 @@ export class ProductoPage implements OnInit {
           const productoAAgregar = { ...this.producto, cantidadSeleccionada: this.cantidadSeleccionada };
           this.carritoService.agregarProducto(productoAAgregar); // Agrega el producto al carrito
           
-          this.mostrarAlerta('Producto añadido al carrito'); // Muestra la alerta de confirmación
+          this.mostrarAlerta('exito','Producto añadido al carrito'); // Muestra la alerta de confirmación
         })
         .catch(error => {
           console.error('Error al actualizar la cantidad:', error);
-          this.mostrarAlerta('Error al añadir el producto al carrito'); // Muestra alerta de error
+          this.mostrarAlerta('Error', ' error al añadir el producto al carrito'); // Muestra alerta de error
         });
     } else {
-      this.mostrarAlerta('Cantidad inválida. Asegúrate de que sea mayor que 0 y no exceda la cantidad disponible.'); // Alerta si la cantidad es inválida
+      this.mostrarAlerta('Cantidad inválida' ,'Asegúrate de que sea mayor que 0 y no exceda la cantidad disponible.'); // Alerta si la cantidad es inválida
     }
+  }
+
+   // Método para iniciar el escaneo de QR
+  async escanearQR() {
+    const permiso = await BarcodeScanner.checkPermission({ force: true });
+    
+    if (!permiso.granted) {
+      this.mostrarAlerta('Permiso denegado', 'Necesitamos acceso a la cámara para escanear el código QR.');
+      return;
+    }
+  
+    BarcodeScanner.hideBackground(); // Oculta el fondo mientras escaneas
+  
+    const result = await BarcodeScanner.startScan(); // Iniciar el escaneo
+  
+    if (result.hasContent) {
+      this.mostrarAlerta('Código QR escaneado', result.content); // Mostrar el contenido escaneado
+      // Aquí puedes hacer lo que necesites con el contenido escaneado
+    } else {
+      this.mostrarAlerta('Error', 'No se pudo leer el código QR');
+    }
+  
+    BarcodeScanner.showBackground(); // Muestra el fondo de nuevo
   }
 
   editarProducto() {
