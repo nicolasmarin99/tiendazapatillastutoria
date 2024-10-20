@@ -1,13 +1,72 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>pago</ion-title>
-  </ion-toolbar>
+<ion-header >
+  <app-barranav titulo="pago"></app-barranav>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">pago</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <hr>
+  <app-logo></app-logo>
+  
+  <hr>
+
+  <form (ngSubmit)="procesarPago()">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Datos de la Tarjeta</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+
+        <!-- Campo para el nombre del titular de la tarjeta -->
+        <ion-item>
+          <ion-label position="floating">Nombre del Titular</ion-label>
+          <ion-input type="text" [(ngModel)]="nombreTitular" name="nombreTitular" required></ion-input>
+        </ion-item>
+        <ion-text color="danger" *ngIf="mostrarErrores && !nombreValido()">
+          <p>El nombre del titular no puede estar vacío.</p>
+        </ion-text>
+
+        <!-- Campo para el número de la tarjeta -->
+        <ion-item>
+          <ion-label position="floating">Número de Tarjeta</ion-label>
+          <ion-input type="text" inputmode="numeric" maxlength="16" minlength="16" pattern="[0-9]*" [(ngModel)]="numeroTarjeta" name="numeroTarjeta" required></ion-input>
+        </ion-item>
+        <ion-text color="danger" *ngIf="mostrarErrores && !numeroTarjetaValido()">
+          <p>El número de tarjeta debe tener 16 dígitos y solo números.</p>
+        </ion-text>
+
+        <!-- Campo para la fecha de vencimiento -->
+        <ion-item>
+          <ion-label position="floating">Fecha de Vencimiento (MM/AA)</ion-label>
+          <ion-input type="text" placeholder="MM/AA" [(ngModel)]="fechaVencimiento" name="fechaVencimiento" required></ion-input>
+        </ion-item>
+        <ion-text color="danger" *ngIf="mostrarErrores && !fechaVencimientoValida()">
+          <p>La fecha debe estar en formato MM/AA.</p>
+        </ion-text>
+
+        <!-- Campo para el código CVV -->
+        <ion-item>
+          <ion-label position="floating">Código CVV</ion-label>
+          <ion-input type="password" inputmode="numeric" maxlength="4" minlength="3" [(ngModel)]="cvv" name="cvv" required></ion-input>
+        </ion-item>
+        <ion-text color="danger" *ngIf="mostrarErrores && !cvvValido()">
+          <p>El CVV debe tener entre 3 y 4 dígitos numéricos.</p>
+        </ion-text>
+
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Botón para enviar el formulario -->
+    <ion-button expand="full" type="submit">Pagar</ion-button>
+  </form>
 </ion-content>
+
+<ion-footer>
+  
+      <!-- Mostrar para usuarios con rol 2 -->
+      <app-barrafooter *ngIf="usuarioRol === 2"></app-barrafooter>
+      <app-barrafooter *ngIf="usuarioRol === null"></app-barrafooter>
+
+      <!-- Mostrar para otros roles o si el rol no se ha cargado -->
+      <app-barrafooter2 *ngIf="usuarioRol === 1"></app-barrafooter2>
+
+</ion-footer>

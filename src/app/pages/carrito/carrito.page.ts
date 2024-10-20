@@ -142,4 +142,8 @@ guardarCarrito() {
     this.presentAlert('Aprobada','La compra ha sido realizada con exito.')
     this.router.navigate(['/inicio'])
   }
+
+  irapago(){
+    this.router.navigate(['/pago'])
+  }
 }
