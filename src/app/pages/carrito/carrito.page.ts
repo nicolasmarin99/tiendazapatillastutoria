@@ -96,6 +96,12 @@ guardarCarrito() {
   }
   
   finalizarCompra() {
+    // Verificar si el carrito está vacío
+    if (this.carrito.length === 0) {
+      this.presentAlert('Carrito vacío', 'Debe haber al menos un producto en el carrito para finalizar la compra.');
+      return; // Salir de la función si el carrito está vacío
+    }
+  
     const id_usuario = localStorage.getItem('id_usuario');
     if (!id_usuario) {
       this.presentAlert('Error', 'No se ha identificado al usuario.');

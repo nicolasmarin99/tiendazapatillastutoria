@@ -41,7 +41,7 @@
   </div>
 
   <!-- Botón para finalizar la compra -->
-  <ion-button expand="full" (click)="finalizarCompra()">
+  <ion-button expand="full" (click)="finalizarCompra()" [disabled]="carrito.length === 0">
     Finalizar compra
   </ion-button>
 </ion-content>
