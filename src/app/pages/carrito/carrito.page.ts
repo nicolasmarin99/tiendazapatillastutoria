@@ -21,8 +21,7 @@ export class CarritoPage implements OnInit {
 
   ngOnInit() {
      // Cargar el carrito al iniciar la página
-    this.carritoService.cargarCarrito();
-    this.carrito = this.carritoService.obtenerCarrito();
+  this.cargarCarrito();
   }
 
   async presentAlert(titulo: string, msj: string) {
@@ -35,19 +34,11 @@ export class CarritoPage implements OnInit {
   }
 
   ionViewDidEnter() {
-    // Opcional: cargar nuevamente el carrito cada vez que entras a la página
-    this.carritoService.cargarCarrito();
-    this.carrito = this.carritoService.obtenerCarrito();
+    this.cargarCarrito(); // Volver a cargar el carrito cuando se entra en la página
+  }
 
-    // Obtener el rol del usuario autenticado (opcional)
-    const id_usuario = localStorage.getItem('id_usuario');
-    if (id_usuario) {
-      this.dbService.obtenerRolUsuario(Number(id_usuario)).then(rol => {
-        this.usuarioRol = rol;
-      }).catch(error => {
-        console.error('Error al obtener el rol del usuario:', error);
-      });
-    }
+  cargarCarrito() {
+    this.carrito = this.carritoService.obtenerCarrito();
   }
 
 
@@ -61,18 +52,17 @@ guardarCarrito() {
 }
 
    // Eliminar un producto del carrito
-  eliminarProducto(id_producto: number) {
+   eliminarProducto(id_producto: number) {
     const productoEliminado = this.carrito.find(item => item.id_producto === id_producto);
 
     if (productoEliminado) {
       const cantidadRestaurada = productoEliminado.cantidadSeleccionada;
 
-      // Restaurar la cantidad en la base de datos
       this.dbService.actualizarCantidadProductoPorId(id_producto, productoEliminado.cantidad + cantidadRestaurada)
         .then(() => {
           // Eliminar el producto del carrito
           this.carritoService.eliminarProducto(id_producto);
-          this.carrito = this.carritoService.obtenerCarrito(); // Actualizar el carrito visualmente
+          this.cargarCarrito(); // Refrescar el carrito en la vista después de eliminar
           this.presentAlert('Éxito', 'Producto eliminado del carrito');
         })
         .catch(error => {

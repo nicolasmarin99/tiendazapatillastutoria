@@ -7,33 +7,29 @@ providedIn: 'root'
 export class CarritoService {
 private carrito: Producto[] = [];
 
-constructor() { }
+constructor() { 
+  this.cargarCarrito(); // Cargar el carrito desde localStorage al iniciar el servicio
+}
 
-  // Agrega un producto al carrito
+   // Método para agregar un producto al carrito
   agregarProducto(producto: Producto) {
     const productoExistente = this.carrito.find(item => item.id_producto === producto.id_producto);
-  
+
     if (productoExistente) {
-      // Actualiza la cantidad seleccionada del producto en el carrito
-      productoExistente.cantidadSeleccionada = producto.cantidadSeleccionada;
+      productoExistente.cantidadSeleccionada += producto.cantidadSeleccionada;
     } else {
-      // Agrega el producto al carrito si no existe
       this.carrito.push(producto);
     }
-  
-    // Guarda el carrito en el localStorage
+
     this.guardarCarrito();
   }
 
-  // Método para guardar el carrito en el localStorage
+   // Método para guardar el carrito en localStorage
   guardarCarrito() {
-    if (this.carrito.length === 0) {
-      localStorage.removeItem('carrito'); // Limpia el localStorage si el carrito está vacío
-    } else {
-      localStorage.setItem('carrito', JSON.stringify(this.carrito)); // Guarda el carrito en localStorage
-    }
+    localStorage.setItem('carrito', JSON.stringify(this.carrito));
   }
 
+  // Método para cargar el carrito desde localStorage
   cargarCarrito() {
     const carritoGuardado = localStorage.getItem('carrito');
     if (carritoGuardado) {
@@ -43,19 +39,21 @@ constructor() { }
     }
   }
 
-  // Devuelve la lista de productos en el carrito
-obtenerCarrito(): Producto[] {
+  // Método para obtener el carrito
+  obtenerCarrito(): Producto[] {
     return this.carrito;
-}
+  }
 
-  // Limpia el carrito de compras
-limpiarCarrito() {
+   // Método para limpiar completamente el carrito
+  limpiarCarrito() {
     this.carrito = [];
-}
+    localStorage.removeItem('carrito');
+  }
 
-  // Eliminar un producto del carrito por su id
+ // Método para eliminar un producto del carrito
 eliminarProducto(id_producto: number) {
-    this.carrito = this.carrito.filter(item => item.id_producto !== id_producto); // Guarda el carrito actualizado en localStorage o en la BD, si es necesario
+  this.carrito = this.carrito.filter(item => item.id_producto !== id_producto);
+  this.guardarCarrito(); // Actualizar el localStorage después de eliminar
 }
 
 // Método para calcular el total del carrito
