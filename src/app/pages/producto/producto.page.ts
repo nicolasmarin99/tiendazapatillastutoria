@@ -35,6 +35,14 @@ export class ProductoPage implements OnInit {
     }
   }
 
+  ionViewWillEnter() {
+    // Recargar los datos del producto cuando el usuario regrese a la página
+    const id = this.router.snapshot.paramMap.get('id');
+    if (id) {
+      this.obtenerProductoPorId(id); // Vuelve a obtener el producto cada vez que entras a la página
+    }
+  }
+
   async mostrarAlerta(mensaje: string) {
     const alert = await this.alertController.create({
       header: 'Confirmación',
