@@ -72,4 +72,9 @@ export class DetalleboletaPage implements OnInit {
     }
   }
 
+  // Método para volver a la página de inicio
+  volverInicio() {
+    this.router.navigate(['/inicio']);
+  }
+
 }
