@@ -10,9 +10,45 @@ import { ServiciobdService } from 'src/app/services/serviciobd.service';
 })
 export class DetalleboletaPage implements OnInit {
   usuarioRol: number | null = null; // Aquí se almacenará el rol del usuario
+  nombreUsuario: string = '';
+  region: string = '';
+  ciudad: string = '';
+  calle: string = '';
+  numeroDomicilio: string = '';
+  productosComprados: any[] = [];
+  mensajeAgradecimiento: string = '¡Muchas gracias por su compra!';
   constructor(private router:Router, private dbService:ServiciobdService,private alertController: AlertController) { }
 
   ngOnInit() {
+    this.cargarDetallesBoleta();
+  }
+
+  cargarDetallesBoleta() {
+    const id_usuario = localStorage.getItem('id_usuario'); // Obtener el ID del usuario desde localStorage
+
+    if (id_usuario) {
+      // Obtener la información del usuario
+      this.dbService.obtenerUsuarioConDireccion(Number(id_usuario))
+        .then(usuario => {
+          this.nombreUsuario = usuario.nombre_usuario;
+          this.region = usuario.region;
+          this.ciudad = usuario.ciudad;
+          this.calle = usuario.calle;
+          this.numeroDomicilio = usuario.numero_domicilio;
+        })
+        .catch(error => {
+          console.error('Error al obtener los datos del usuario:', error);
+        });
+
+      // Obtener los productos comprados en la última compra
+      this.dbService.obtenerUltimaCompraConDetalles(Number(id_usuario))
+        .then(productos => {
+          this.productosComprados = productos;
+        })
+        .catch(error => {
+          console.error('Error al obtener los detalles de la compra:', error);
+        });
+    }
   }
 
   ionViewDidEnter() {

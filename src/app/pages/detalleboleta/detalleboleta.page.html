@@ -8,6 +8,31 @@
   
   <hr>
 
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>{{ mensajeAgradecimiento }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>Nombre del Usuario: {{ nombreUsuario }}</p>
+      <p>Dirección de envío:</p>
+      <p>Región: {{ region }}</p>
+      <p>Ciudad: {{ ciudad }}</p>
+      <p>Calle: {{ calle }}</p>
+      <p>Número de domicilio: {{ numeroDomicilio }}</p>
+
+      <hr>
+
+      <ion-card-title>Productos comprados:</ion-card-title>
+      <ion-item *ngFor="let producto of productosComprados">
+        <ion-label>
+          Producto: {{ producto.nombre_producto }}<br>
+          Cantidad: {{ producto.cantidad }}<br>
+          Talla: {{ producto.talla }}<br>
+          Precio unitario: ${{ producto.precio_unitario }}
+        </ion-label>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
   
 </ion-content>
 

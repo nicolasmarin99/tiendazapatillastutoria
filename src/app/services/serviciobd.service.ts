@@ -200,6 +200,56 @@ export class ServiciobdService {
     }
   }
 
+  // Obtener la información del usuario junto con la dirección
+async obtenerUsuarioConDireccion(id_usuario: number): Promise<any> {
+  const query = `
+    SELECT Usuario.nombre_usuario, Direccion.region, Direccion.ciudad, Direccion.calle, Direccion.numero_domicilio
+    FROM Usuario
+    JOIN Direccion ON Usuario.id_usuario = Direccion.id_usuario
+    WHERE Usuario.id_usuario = ?`;
+
+  const res = await this.database.executeSql(query, [id_usuario]);
+
+  if (res.rows.length > 0) {
+    return res.rows.item(0);
+  } else {
+    throw new Error('Usuario no encontrado.');
+  }
+}
+
+// Obtener los detalles de la última compra realizada por el usuario
+async obtenerUltimaCompraConDetalles(id_usuario: number): Promise<any[]> {
+  const queryCompra = `
+    SELECT Compra.id_compra
+    FROM Compra
+    WHERE Compra.id_usuario = ?
+    ORDER BY Compra.fecha_compra DESC
+    LIMIT 1`;
+
+  const resCompra = await this.database.executeSql(queryCompra, [id_usuario]);
+
+  if (resCompra.rows.length > 0) {
+    const id_compra = resCompra.rows.item(0).id_compra;
+
+    const queryDetalles = `
+      SELECT Producto2.nombre_producto, DetalleCompra.cantidad, DetalleCompra.talla, DetalleCompra.precio_unitario
+      FROM DetalleCompra
+      JOIN Producto2 ON DetalleCompra.id_producto = Producto2.id_producto
+      WHERE DetalleCompra.id_compra = ?`;
+
+    const resDetalles = await this.database.executeSql(queryDetalles, [id_compra]);
+
+    let productos = [];
+    for (let i = 0; i < resDetalles.rows.length; i++) {
+      productos.push(resDetalles.rows.item(i));
+    }
+
+    return productos;
+  } else {
+    throw new Error('No se encontró ninguna compra para el usuario.');
+  }
+}
+
   async actualizarUsuario(id_usuario: number, nombre_usuario: string, ciudad: string, calle: string, numero_domicilio: string, region: string, contraseña: string) {
     try {
       // Actualizar el nombre del usuario
