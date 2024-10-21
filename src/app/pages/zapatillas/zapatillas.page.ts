@@ -28,7 +28,7 @@ export class ZapatillasPage implements OnInit {
     this.dbService.fetchProductos().subscribe(data => {
       this.productos = data;
     });
-    this.presentAlert(this.productos+"");
+    
     //this.presentAlert("2");
    }
 
