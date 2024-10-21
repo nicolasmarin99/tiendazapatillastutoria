@@ -85,6 +85,7 @@ export class ServiciobdService {
       await this.database.executeSql(this.tablaCompras, []);
       await this.database.executeSql(this.tablaDetallesCompra, []);
       await this.recrearTablaProductos();
+      await this.insertarProductosPorDefecto();
       
 
       // Inserta el usuario administrador
@@ -122,6 +123,41 @@ export class ServiciobdService {
       throw new Error('Error en la inserción del administrador');
     }
   }
+
+  // Método para insertar productos por defecto
+async insertarProductosPorDefecto() {
+  try {
+    const res = await this.database.executeSql('SELECT COUNT(id_producto) AS count FROM Producto2', []);
+    const count = res.rows.item(0).count;
+
+    if (count === 0) { // Si la tabla está vacía, insertar productos por defecto
+      const producto = {
+        nombre: 'Zapatilla Running Ultra',
+        marca: 'adidas',
+        talla: '10',
+        precio: 150000,
+        cantidad: 10,
+        imagen: 'src/assets/insertar zapatilla.png'  // Ruta o URL de la imagen
+      };
+
+      // Insertar producto
+      await this.agregarProducto(
+        producto.nombre,
+        producto.marca,
+        producto.talla,
+        producto.precio,
+        producto.cantidad,
+        producto.imagen
+      );
+
+      console.log('Producto por defecto insertado correctamente.');
+    }
+  } catch (error) {
+    console.error('Error al insertar productos por defecto:', error);
+  }
+}
+
+  
 
   async registrarUsuario(nombre_usuario: string, email: string, contrasena: string, region: string, ciudad: string, calle: string, tipo_domicilio: string, numero_domicilio: string) {
     try {

@@ -44,6 +44,10 @@ export class EditarPerfilPage implements OnInit {
     }
   }
 
+  ionViewWillEnter() {
+    this.cargarDatosUsuario(); // Volver a cargar los datos del usuario cuando se entra en la página
+  }
+
   // Cargar los datos del usuario desde la base de datos
   cargarDatosUsuario() {
     this.dbService.seleccionarUsuario().then(() => {
