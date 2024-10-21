@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ServiciobdService } from 'src/app/services/serviciobd.service';
-import { AlertController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-editarperfil',
@@ -26,7 +26,8 @@ export class EditarPerfilPage implements OnInit {
   constructor(
     private router: Router, 
     private dbService: ServiciobdService,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private navCtrl: NavController  // Utiliza NavController
   ) {}
 
   ngOnInit() {
@@ -50,6 +51,7 @@ export class EditarPerfilPage implements OnInit {
 
   // Cargar los datos del usuario desde la base de datos
   cargarDatosUsuario() {
+    // Cargar datos del usuario desde el servicio
     this.dbService.seleccionarUsuario().then(() => {
       this.dbService.fetchUsuarios().subscribe((usuarios) => {
         if (usuarios && usuarios.length > 0) {
@@ -58,7 +60,7 @@ export class EditarPerfilPage implements OnInit {
           this.nombre_usuario = usuario.nombre_usuario;
           this.contraseña = usuario.contraseña;
           
-          // Llamar a la función para obtener la dirección del usuario
+          // Cargar la dirección
           this.dbService.obtenerDireccionUsuario(this.id_usuario).then((direccion) => {
             if (direccion) {
               this.ciudad = direccion.ciudad;
@@ -73,12 +75,15 @@ export class EditarPerfilPage implements OnInit {
   }
 
  // Validar contraseña actual antes de guardar cambios
-guardarCambios() {
+ guardarCambios() {
   if (this.contrasenaActual === this.contraseña) {
     const nuevaContraseña = this.nueva_contrasena ? this.nueva_contrasena : this.contraseña;
     this.dbService.actualizarUsuario(this.id_usuario, this.nombre_usuario, this.ciudad, this.calle, this.numero_domicilio, this.region, nuevaContraseña).then(() => {
       this.presentAlert('Éxito', 'Los cambios han sido guardados.');
-      this.router.navigate(['/perfil']);
+
+      // Pasar el estado "updated" al navegar de regreso al perfil
+      this.router.navigate(['/perfil'], { state: { updated: true } });
+
     }).catch(error => {
       console.error('Error al actualizar el perfil:', error);
       this.presentAlert('Error', 'Hubo un problema al guardar los cambios.');
@@ -96,4 +101,5 @@ guardarCambios() {
     });
     await alert.present();
   }
+
 }

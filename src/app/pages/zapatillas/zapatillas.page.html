@@ -6,52 +6,55 @@
   </ion-header>
   <ion-content class="ion-padding">
 
+    <!-- Filtro por rango de precios -->
     <div>
-      <p class="color-negro negrita">Filtrar por marca</p>
+      <p class="color-negro negrita">Filtrar por precio</p>
 
       <div class="contenedor-lista margin-auto">
         <ion-list class="sin-padding">
           <ion-item>
-            <ion-select aria-label="Marca" interface="action-sheet" placeholder="Marca">
-              <ion-select-option value="Adidas">Adidas</ion-select-option>
-              <ion-select-option value="Puma">Puma</ion-select-option>
-            </ion-select>
+            <ion-label>Precio mínimo</ion-label>
+            <ion-input type="number" [(ngModel)]="precioMinimo" placeholder="Mínimo"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Precio máximo</ion-label>
+            <ion-input type="number" [(ngModel)]="precioMaximo" placeholder="Máximo"></ion-input>
           </ion-item>
         </ion-list>
       </div>
     </div>
 
-      <br>
+    <br>
 
-      <p class="color-negro negrita">Filtrar por talla</p>
+    <!-- Filtro por talla -->
+    <p class="color-negro negrita">Filtrar por talla</p>
+    <ion-list class="sin-padding">
+      <ion-item>
+        <ion-select aria-label="Talla" interface="action-sheet" placeholder="Talla (US)" [(ngModel)]="tallaSeleccionada">
+          <ion-select-option value="7.5">7.5 (25.5 cms)</ion-select-option>
+          <ion-select-option value="8">8 (26 cms)</ion-select-option>
+          <ion-select-option value="8.5">8.5 (26.5 cms)</ion-select-option>
+          <ion-select-option value="9">9 (27 cms)</ion-select-option>
+          <ion-select-option value="9.5">9.5 (27.5 cms)</ion-select-option>
+          <ion-select-option value="10">10 (28 cms)</ion-select-option>
+          <ion-select-option value="10.5">10.5 (28.5 cms)</ion-select-option>
+          <ion-select-option value="11">11 (29 cms)</ion-select-option>
+          <ion-select-option value="11.5">11.5 (29.5 cms)</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
 
-      <ion-list class="sin-padding">
-        <ion-item>
-          <ion-select aria-label="Talla" interface="action-sheet" placeholder="Talla (US)">
-            <ion-select-option value="7.5">7.5 (25.5 cms)</ion-select-option>
-            <ion-select-option value="8">8 (26 cms)</ion-select-option>
-            <ion-select-option value="8.5">8.5 (26.5 cms)</ion-select-option>
-            <ion-select-option value="9">9 (27 cms)</ion-select-option>
-            <ion-select-option value="9.5">9.5 (27.5 cms)</ion-select-option>
-            <ion-select-option value="10">10 (28 cms)</ion-select-option>
-            <ion-select-option value="10.5">10.5 (28.5 cms)</ion-select-option>
-            <ion-select-option value="11">11 (29 cms)</ion-select-option>
-            <ion-select-option value="11.5">11.5 (29.5 cms)</ion-select-option>
-          </ion-select>
-        </ion-item>
-      </ion-list>
+    <br>
 
-      <br>
-
-      
     <ion-menu-toggle>
-      <ion-button class="boton-vaciar">
+      <ion-button class="boton-vaciar" (click)="limpiarFiltros()">
         Limpiar
         <ion-icon slot="start" name="trash"></ion-icon>
       </ion-button>
     </ion-menu-toggle>
+
     <ion-menu-toggle>
-      <ion-button class="boton-filtro">
+      <ion-button class="boton-filtro" (click)="filtrarProductos()">
         Filtrar
         <ion-icon slot="start" name="filter"></ion-icon>
       </ion-button>
@@ -86,20 +89,14 @@
   <hr>
 
   <ion-list>
-    <ion-item *ngFor="let producto of productos">
+    <ion-item *ngFor="let producto of productosFiltrados">
       <ion-card>
-        <!-- Muestra la imagen del producto si existe, de lo contrario, usa una imagen por defecto -->
-        <img class="imagen" *ngIf="producto.imagen_producto" [src]="producto.imagen_producto" alt="Imagen del producto" (click)="irADetalleProducto(producto.id_producto)" />
-      
+        <img class="imagen" *ngIf="producto.imagen_producto" [src]="producto.imagen_producto" alt="Imagen del producto" (click)="irADetalleProducto(producto.id_producto)"/>
         <ion-card-header>
-          <!-- Título de la tarjeta con el nombre del producto -->
           <ion-card-title>{{ producto.nombre_producto }}</ion-card-title>
-          <!-- Subtítulo de la tarjeta, por ejemplo, puedes usar la marca o cualquier otra propiedad -->
           <ion-card-subtitle>Marca: {{ producto.marca }}</ion-card-subtitle>
         </ion-card-header>
-      
         <ion-card-content>
-          <!-- Detalles adicionales del producto en el contenido de la tarjeta -->
           <p>Talla: {{ producto.talla }}</p>
           <p>Precio: ${{ producto.precio }}</p>
           <p>Cantidad: {{ producto.cantidad }}</p>

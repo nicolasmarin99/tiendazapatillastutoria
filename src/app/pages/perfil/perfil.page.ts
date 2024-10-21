@@ -34,6 +34,21 @@ export class PerfilPage implements OnInit {
   }
 
   ionViewDidEnter() {
+    this.obtenerRolUsuario();
+  }
+  ionViewWillEnter() {
+    this.verificarActualizacion();
+  }
+
+  verificarActualizacion() {
+    const navigation = this.router.getCurrentNavigation();
+    if (navigation?.extras?.state?.['updated']) {
+      // Si se ha actualizado, recargar los datos del usuario
+      this.obtenerUsuario();
+    }
+  }
+
+  obtenerRolUsuario() {
     const id_usuario = localStorage.getItem('id_usuario');
     if (id_usuario) {
       this.dbService.obtenerRolUsuario(Number(id_usuario)).then(rol => {
@@ -53,8 +68,8 @@ export class PerfilPage implements OnInit {
           this.id_usuario = usuario.id_usuario;
           this.nombre_usuario = usuario.nombre_usuario;
           this.email = usuario.email;
-          
-          // Llamar a la función para obtener la dirección del usuario
+  
+          // Obtener la dirección actualizada del usuario
           this.obtenerDireccion();
         }
       });

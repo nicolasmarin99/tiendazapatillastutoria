@@ -14,6 +14,11 @@ export class ZapatillasPage implements OnInit {
   usuarioRol: number | null = null; // Aquí se almacenará el rol del usuario
   usuario: string = "";
   productos: Producto[] = [];
+  productosFiltrados: Producto[] = [];
+  // Variables para los filtros
+  precioMinimo: number | null = null;
+  precioMaximo: number | null = null;
+  tallaSeleccionada: string | null = null;
 
   constructor(private router: Router, private dbService:ServiciobdService,private alertController: AlertController,private activerouter: ActivatedRoute) {
 
@@ -22,15 +27,13 @@ export class ZapatillasPage implements OnInit {
         this.usuario = this.router.getCurrentNavigation()?.extras?.state?.['user'];
       }
     });
-    
-    //this.presentAlert("1"); 
-    //this.dbService.obtenerProductos();
+
     this.dbService.fetchProductos().subscribe(data => {
       this.productos = data;
+      this.productosFiltrados = data; // Inicialmente, todos los productos
     });
-    
-    //this.presentAlert("2");
-   }
+
+  }
 
   ngOnInit() {
   }
@@ -67,6 +70,24 @@ export class ZapatillasPage implements OnInit {
   
     // Recargar los productos cada vez que la página se muestra
     this.dbService.obtenerProductos(); // Recargar productos actualizados
+  }
+
+  // Función para filtrar los productos
+  filtrarProductos() {
+    this.productosFiltrados = this.productos.filter(producto => {
+      const cumplePrecio = (!this.precioMinimo || producto.precio >= this.precioMinimo) && (!this.precioMaximo || producto.precio <= this.precioMaximo);
+      const cumpleTalla = !this.tallaSeleccionada || producto.talla === this.tallaSeleccionada;
+
+      return cumplePrecio && cumpleTalla;
+    });
+  }
+
+  // Función para limpiar los filtros
+  limpiarFiltros() {
+    this.precioMinimo = null;
+    this.precioMaximo = null;
+    this.tallaSeleccionada = null;
+    this.productosFiltrados = [...this.productos]; // Restaurar todos los productos
   }
 
    // Función para redirigir a la página de detalles del producto

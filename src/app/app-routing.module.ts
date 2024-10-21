@@ -88,12 +88,14 @@ const routes: Routes = [
     loadChildren: () => import('./pages/detalleboleta/detalleboleta.module').then( m => m.DetalleboletaPageModule)
   },
   {
-    path: '**',
-    loadChildren: () => import('./pages/notfound/notfound.module').then( m => m.NotfoundPageModule)
-  },  {
     path: 'scannerqr',
     loadChildren: () => import('./pages/scannerqr/scannerqr.module').then( m => m.ScannerqrPageModule)
   },
+  {
+    path: '**',
+    loadChildren: () => import('./pages/notfound/notfound.module').then( m => m.NotfoundPageModule)
+  },
+  
 
   
 
