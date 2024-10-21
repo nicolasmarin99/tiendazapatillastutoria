@@ -34,7 +34,6 @@ export class ZapatillasadPage implements OnInit {
       this.productos = data;
       this.productosFiltrados = data; // Inicialmente, todos los productos
     });
-    this.presentAlert(this.productos+"");
     
   }
 

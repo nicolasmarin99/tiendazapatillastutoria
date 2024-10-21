@@ -16,10 +16,21 @@
       <ion-input [(ngModel)]="producto.marca" name="marca"></ion-input>
     </ion-item>
 
-    <ion-item>
-      <ion-label>Talla</ion-label>
-      <ion-input [(ngModel)]="producto.talla" name="talla"></ion-input>
-    </ion-item>
+    <ion-list class="sin-padding">
+      <ion-item>
+        <ion-select aria-label="Talla" interface="action-sheet" placeholder="Talla (US)" [(ngModel)]="producto.talla">
+          <ion-select-option value="7.5">7.5 (25.5 cms)</ion-select-option>
+          <ion-select-option value="8">8 (26 cms)</ion-select-option>
+          <ion-select-option value="8.5">8.5 (26.5 cms)</ion-select-option>
+          <ion-select-option value="9">9 (27 cms)</ion-select-option>
+          <ion-select-option value="9.5">9.5 (27.5 cms)</ion-select-option>
+          <ion-select-option value="10">10 (28 cms)</ion-select-option>
+          <ion-select-option value="10.5">10.5 (28.5 cms)</ion-select-option>
+          <ion-select-option value="11">11 (29 cms)</ion-select-option>
+          <ion-select-option value="11.5">11.5 (29.5 cms)</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
 
     <ion-item>
       <ion-label>Precio</ion-label>
