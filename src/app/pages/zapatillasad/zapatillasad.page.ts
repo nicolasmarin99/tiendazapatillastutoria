@@ -92,16 +92,22 @@ export class ZapatillasadPage implements OnInit {
     this.productosFiltrados = [...this.productos]; // Restaurar todos los productos
   }
 
-  // Función para eliminar producto
-  eliminarProducto(id_producto: number) {
-    // Eliminar el producto de la base de datos
-    this.dbService.eliminarProducto(id_producto).then(() => {
-      // Eliminar el producto de la lista local
-      this.productos = this.productos.filter(producto => producto.id_producto !== id_producto);
-    }).catch(error => {
-      console.error('Error al eliminar producto', error);
-    });
-  }
+ // Función para eliminar el producto
+eliminarProducto(id_producto: number) {
+  // Eliminar el producto de la base de datos
+  this.dbService.eliminarProducto(id_producto).then(() => {
+    // Actualizar la lista local de productos filtrados
+    this.productosFiltrados = this.productosFiltrados.filter(producto => producto.id_producto !== id_producto);
+    
+    // También actualiza los productos globales
+    this.productos = this.productos.filter(producto => producto.id_producto !== id_producto);
+
+    // Refrescar las vistas en zapatillas.html e inicio.html
+    this.dbService.obtenerProductos(); // Asegúrate de que esta llamada actualice todas las listas de productos
+  }).catch(error => {
+    console.error('Error al eliminar producto', error);
+  });
+}
 
     // Función para redirigir a la página de detalles del producto
     irADetalleProducto(id_producto: any): void {

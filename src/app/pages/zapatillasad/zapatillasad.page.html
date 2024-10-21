@@ -111,6 +111,10 @@
           <p>Talla: {{ producto.talla }}</p>
           <p>Precio: ${{ producto.precio }}</p>
           <p>Cantidad: {{ producto.cantidad }}</p>
+          <!-- Botón para eliminar el producto -->
+          <ion-button color="danger" (click)="eliminarProducto(producto.id_producto)">
+            Eliminar
+          </ion-button>
         </ion-card-content>
       </ion-card>
     </ion-item>

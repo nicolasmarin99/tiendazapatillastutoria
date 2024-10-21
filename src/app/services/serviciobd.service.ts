@@ -125,37 +125,49 @@ export class ServiciobdService {
   }
 
   // Método para insertar productos por defecto
-async insertarProductosPorDefecto() {
-  try {
-    const res = await this.database.executeSql('SELECT COUNT(id_producto) AS count FROM Producto2', []);
-    const count = res.rows.item(0).count;
-
-    if (count === 0) { // Si la tabla está vacía, insertar productos por defecto
-      const producto = {
-        nombre: 'Zapatilla Running Ultra',
-        marca: 'adidas',
-        talla: '10',
-        precio: 150000,
-        cantidad: 10,
-        imagen: 'src/assets/insertar zapatilla.png'  // Ruta o URL de la imagen
-      };
-
-      // Insertar producto
-      await this.agregarProducto(
-        producto.nombre,
-        producto.marca,
-        producto.talla,
-        producto.precio,
-        producto.cantidad,
-        producto.imagen
-      );
-
-      console.log('Producto por defecto insertado correctamente.');
+  async insertarProductosPorDefecto() {
+    try {
+      const res = await this.database.executeSql('SELECT COUNT(id_producto) AS count FROM Producto2', []);
+      const count = res.rows.item(0).count;
+  
+      if (count === 0) { // Si la tabla está vacía, insertar productos por defecto
+        const productos = [
+          {
+            nombre: 'Zapatilla Running Ultra',
+            marca: 'adidas',
+            talla: '10',
+            precio: 150000,
+            cantidad: 10,
+            imagen: 'src/assets/insertar zapatilla.png' // Ruta o URL de la imagen
+          },
+          {
+            nombre: 'Zapatilla Casual Classic',
+            marca: 'Puma',
+            talla: '9',
+            precio: 120000,
+            cantidad: 15,
+            imagen: 'src/assets/insertar zapatilla 2.png' // Ruta o URL de la imagen
+          }
+        ];
+  
+        // Insertar cada producto
+        for (const producto of productos) {
+          await this.agregarProducto(
+            producto.nombre,
+            producto.marca,
+            producto.talla,
+            producto.precio,
+            producto.cantidad,
+            producto.imagen
+          );
+        }
+  
+        console.log('Productos por defecto insertados correctamente.');
+      }
+    } catch (error) {
+      console.error('Error al insertar productos por defecto:', error);
     }
-  } catch (error) {
-    console.error('Error al insertar productos por defecto:', error);
   }
-}
 
   
 
@@ -357,19 +369,19 @@ async obtenerUltimaCompraConDetalles(id_usuario: number): Promise<any[]> {
     });
   }
 
-   // Método para eliminar un producto por su ID
+  // Método para eliminar un producto por su ID
   eliminarProducto(id_producto: number): Promise<any> {
-    const query = 'DELETE FROM Producto2 WHERE id_producto = ?';
-    return this.database.executeSql(query, [id_producto])
-      .then(res => {
-        console.log('Producto eliminado');
-        return res;
-      })
-      .catch(error => {
-        console.error('Error al eliminar producto', error);
-        throw error;
-      });
-  }
+  const query = 'DELETE FROM Producto2 WHERE id_producto = ?';
+  return this.database.executeSql(query, [id_producto])
+    .then(res => {
+      console.log('Producto eliminado');
+      return res;
+    })
+    .catch(error => {
+      console.error('Error al eliminar producto', error);
+      throw error;
+    });
+}
 
   modificarProducto(id_producto: number, nombre: string, cantidad: number, precio: number, talla: string, marca: string, imagen: Blob) {
     const query = `UPDATE Producto2 SET nombre_producto = ?, cantidad = ?, precio = ?, talla = ?, marca = ?, imagen_producto = ? WHERE id_producto = ?`;
