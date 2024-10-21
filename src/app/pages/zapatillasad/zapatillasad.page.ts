@@ -55,6 +55,20 @@ export class ZapatillasadPage implements OnInit {
     }
   }
 
+  ionViewWillEnter() {
+    const id_usuario = localStorage.getItem('id_usuario');
+    if (id_usuario) {
+      this.dbService.obtenerRolUsuario(Number(id_usuario)).then(rol => {
+        this.usuarioRol = rol;
+      }).catch(error => {
+        console.error('Error al obtener el rol del usuario:', error);
+      });
+    }
+  
+    // Recargar los productos cada vez que la página se muestra
+    this.dbService.obtenerProductos(); // Asegúrate de que esto actualiza los productos desde la base de datos
+  }
+
   // Función para eliminar producto
   eliminarProducto(id_producto: number) {
     // Eliminar el producto de la base de datos

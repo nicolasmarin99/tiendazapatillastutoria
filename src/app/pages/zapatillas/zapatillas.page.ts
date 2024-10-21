@@ -55,6 +55,20 @@ export class ZapatillasPage implements OnInit {
     }
   }
 
+  ionViewWillEnter() {
+    const id_usuario = localStorage.getItem('id_usuario');
+    if (id_usuario) {
+      this.dbService.obtenerRolUsuario(Number(id_usuario)).then(rol => {
+        this.usuarioRol = rol;
+      }).catch(error => {
+        console.error('Error al obtener el rol del usuario:', error);
+      });
+    }
+  
+    // Recargar los productos cada vez que la página se muestra
+    this.dbService.obtenerProductos(); // Recargar productos actualizados
+  }
+
    // Función para redirigir a la página de detalles del producto
   irADetalleProducto(id_producto: any): void {
     this.router.navigate(['/producto', id_producto]);

@@ -30,7 +30,7 @@ export class ServiciobdService {
 
   //variables para guardar los datos de las consultas en las tablas
   listadoUsuarios = new BehaviorSubject([]);
-  listaProductos = new BehaviorSubject([]);
+  listaProductos = new BehaviorSubject<Producto[]>([]);
   //variable para el status de la Base de datos
   private isDBReady: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
@@ -333,35 +333,25 @@ async obtenerUltimaCompraConDetalles(id_usuario: number): Promise<any[]> {
   }
 
   obtenerProductos() {
-    // Retornar la ejecución de la sentencia SQL
     return this.database.executeSql('SELECT * FROM Producto2', []).then(res => {
-        // Crear variable que almacena el resultado del select
         let items2: Producto[] = [];
-        
-        // Verificar si existen registros traídos por el select 
+  
         if (res.rows.length > 0) {
-            
-            // Recorrer el resultado registro a registro
             for (var i = 0; i < res.rows.length; i++) {
-                
-                // Agregar registro a registro en mi arreglo items
-                items2.push({            
+                items2.push({
                     id_producto: res.rows.item(i).id_producto,
-                    nombre_producto: res.rows.item(i).nombre_producto, // Cambiado aquí
+                    nombre_producto: res.rows.item(i).nombre_producto,
                     marca: res.rows.item(i).marca,
                     talla: res.rows.item(i).talla,
                     precio: res.rows.item(i).precio,
                     cantidad: res.rows.item(i).cantidad,
                     imagen_producto: res.rows.item(i).imagen_producto,
-                    cantidadSeleccionada:res.rows.item(i).cantidadSeleccionada
-
+                    cantidadSeleccionada: res.rows.item(i).cantidadSeleccionada
                 });
-                
             }
         }
-
-        // Actualizar el observable con los nuevos registros
-        this.listaProductos.next(items2 as any);
+  
+        this.listaProductos.next(items2); // Actualizar el observable con los nuevos productos
     }).catch(e => {
         this.presentAlert('Error', 'Error al obtener productos: ' + JSON.stringify(e));
     });
