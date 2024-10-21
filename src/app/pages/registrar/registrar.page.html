@@ -12,15 +12,20 @@
       <app-logo></app-logo>
 
       <div class="contenedor-input margin-auto">
+        <!-- Campo Usuario -->
         <ion-input label="Usuario" label-placement="floating" fill="outline" type="text" placeholder="Ingrese su usuario. Ej: MarkusAce" [(ngModel)]="usuario1"></ion-input>
+        <p *ngIf="errores.usuario1" class="error">{{ errores.usuario1 }}</p>
 
         <br>
 
+        <!-- Campo Email -->
         <ion-input label="Email" label-placement="floating" fill="outline" type="email" placeholder="Ingrese su email. Ej: correo@gmail.com" [(ngModel)]="email1"></ion-input>
+        <p *ngIf="errores.email1" class="error">{{ errores.email1 }}</p>
 
         <br>
 
-        <ion-select label="seleccione su region" label-placement="floating" fill="solid" [(ngModel)]="region">
+        <!-- Campo Región -->
+        <ion-select label="Seleccione su región" label-placement="floating" fill="solid" [(ngModel)]="region">
           <ion-select-option value="arica y parinacota">arica y parinacota</ion-select-option>
           <ion-select-option value="region de antofagasta">region de antofagasta</ion-select-option>
           <ion-select-option value="region de atacama">region de atacama</ion-select-option>
@@ -35,52 +40,59 @@
           <ion-select-option value="region de los lagos">region de los lagos</ion-select-option>
           <ion-select-option value="region de los rios">region de los rios</ion-select-option>
           <ion-select-option value="region de aysen">region de aysen</ion-select-option>
-          <ion-select-option value="region de magallanes">region de magallanes</ion-select-option>   
+          <ion-select-option value="region de magallanes">region de magallanes</ion-select-option>  
+          <!-- Añadir más opciones aquí -->
         </ion-select>
 
         <br>
 
+        <!-- Campo Ciudad -->
         <ion-input label="ciudad" label-placement="floating" fill="outline" type="text" placeholder="Ingrese su ciudad" [(ngModel)]="ciudad"></ion-input>
+        <p *ngIf="errores.ciudad" class="error">{{ errores.ciudad }}</p>
 
         <br>
 
+        <!-- Campo Calle -->
         <ion-input label="calle" label-placement="floating" fill="outline" type="text" placeholder="Ingrese su calle" [(ngModel)]="calle"></ion-input>
+        <p *ngIf="errores.calle" class="error">{{ errores.calle }}</p>
 
         <br>
 
-        <ion-select label="tipo de domicilio" label-placement="floating" fill="solid" [(ngModel)]="tipodomicilio">
-          <ion-select-option value="apple">casa</ion-select-option>
-          <ion-select-option value="banana">departamento</ion-select-option> 
+        <!-- Campo Tipo Domicilio -->
+        <ion-select label="Tipo de domicilio" label-placement="floating" fill="solid" [(ngModel)]="tipodomicilio">
+          <ion-select-option value="casa">Casa</ion-select-option>
+          <ion-select-option value="departamento">Departamento</ion-select-option>
         </ion-select>
 
         <br>
 
+        <!-- Campo Número de Domicilio -->
         <ion-input label="numero domicilio" label-placement="floating" fill="outline" type="text" placeholder="numero de domicilio" [(ngModel)]="numerodomicilio"></ion-input>
+        <p *ngIf="errores.numerodomicilio" class="error">{{ errores.numerodomicilio }}</p>
 
         <br>
 
+        <!-- Campo Contraseña -->
         <ion-input label="Contraseña" label-placement="floating" fill="outline" type="password" placeholder="Ingrese su contraseña." [(ngModel)]="contrasena1"></ion-input>
+        <p *ngIf="errores.contrasena1" class="error">{{ errores.contrasena1 }}</p>
 
         <br>
 
+        <!-- Campo Repetir Contraseña -->
         <ion-input label="Repita su Contraseña" label-placement="floating" fill="outline" type="password" placeholder="Repita su contraseña." [(ngModel)]="contrasenarepetida"></ion-input>
-
-      </div>
-
-      <br>
-
-      <div class="contenedor-input margin-auto centrar">
+        <p *ngIf="errores.contrasenarepetida" class="error">{{ errores.contrasenarepetida }}</p>
+        <!-- Botón Registrar -->
+        <div class="contenedor-input margin-auto centrar">
         <ion-button class="color" (click)="validarRegistro()">
           <ion-icon slot="start" name="person-add-outline"></ion-icon>
-          Regristrar
+          Registrar
         </ion-button>
       </div>
 
+      </div>
+
       <br>
 
-      <div class="contenedor-input margin-auto" (click)="irLogin()">
-        <p class="tamano-letras">¿Ya tienes una cuenta? Inicia sesión aqui!!!</p>
-      </div>
     </div>
   </div>
   

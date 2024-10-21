@@ -19,20 +19,21 @@ export class RegistrarPage implements OnInit {
   calle: string = "";
   tipodomicilio: string = "";
   numerodomicilio: string = "";
-  usuarioRol: number | null = null; // Aquí se almacenará el rol del usuario
+  usuarioRol: number | null = null;
 
+  errores = {
+    usuario1: '',
+    email1: '',
+    contrasena1: '',
+    contrasenarepetida: '',
+    ciudad: '',
+    calle: '',
+    numerodomicilio: ''
+  };
   constructor(private router: Router, private alertController: AlertController,private dbService:ServiciobdService) { }
 
   ngOnInit() { }
 
-  async presentAlert(titulo: string, msj: string) {
-    const alert = await this.alertController.create({
-      header: titulo,
-      message: msj,
-      buttons: ['OK']
-    });
-    await alert.present();
-  }
 
   ionViewDidEnter() {
     const id_usuario = localStorage.getItem('id_usuario');
@@ -46,66 +47,90 @@ export class RegistrarPage implements OnInit {
   }
 
   validarRegistro() {
-
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!#$%&/¡?=*+.:,;-_\[])[A-Za-z\d!#$%&/¡?=*+.:,;-_\[]{8,}$/;
     const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
+    const nombreUsuarioRegex = /^[a-zA-Z0-9]{1,20}$/;
     const direccionRegex = /^[A-Za-z\s]+$/;
+    const numerodomicilioRegexCasa = /^[0-9]+$/;
+    const numerodomicilioRegexDepartamento = /^[A-Za-z0-9\s]+$/;
 
-    const numerodomicilioRegex = /^[A-Za-z0-9\s]+$/;
+    // Limpiar mensajes de error
+    this.errores = {
+      usuario1: '',
+      email1: '',
+      contrasena1: '',
+      contrasenarepetida: '',
+      ciudad: '',
+      calle: '',
+      numerodomicilio: ''
+    };
 
-    if ((this.usuario1 == "") || (this.email1 == "") || (this.contrasena1 == "") || (this.contrasenarepetida == "") || (this.ciudad == "") || (this.region == "") || (this.calle == "") || (this.tipodomicilio == "" || (this.numerodomicilio == ""))) {
-      this.presentAlert('Error', 'Los campos no pueden estar vacíos.')
+    // Validaciones
+    let valido = true;
+
+    if (!nombreUsuarioRegex.test(this.usuario1)) {
+      this.errores.usuario1 = 'El nombre de usuario solo debe tener letras, números y máximo 20 caracteres.';
+      valido = false;
     }
-    else if ((this.usuario1 == "MarkusAce") || (this.usuario1 == "NicolasMa")) {
-      this.presentAlert('Error', 'El nombre de usuario ya existe.')
+    if (!correoRegex.test(this.email1)) {
+      this.errores.email1 = 'El email no es válido,debe seguir la estructura "example@dominio.com';
+      valido = false;
     }
-    else if (!correoRegex.test(this.email1)) {
-      this.presentAlert('Error', 'El email no es válido.')
+    if (!passwordRegex.test(this.contrasena1)) {
+      this.errores.contrasena1 = 'La contraseña debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial (!#$%&/¡?=*+.:,;-_[).';
+      valido = false;
     }
-    else if (!passwordRegex.test(this.contrasena1)) {
-      this.presentAlert('Error', 'La contraseña ingresada no puede tener menos de 8 caracteres, debe contener una mayúscula, un número y un carácter especial Ej: @')
+    if (this.contrasenarepetida !== this.contrasena1) {
+      this.errores.contrasenarepetida = 'Las contraseñas no coinciden.';
+      valido = false;
     }
-    else if (!direccionRegex.test(this.calle)) {
-      this.presentAlert('Error', 'La dirección ingresada no puede contener caracteres especiales ni números.')
+    if (!direccionRegex.test(this.ciudad)) {
+      this.errores.ciudad = 'La ciudad solo puede tener letras.';
+      valido = false;
     }
-    else if (!direccionRegex.test(this.ciudad)) {
-      this.presentAlert('Error', 'La ciudad ingresada no puede contener caracteres especiales ni números.')
+    if (!direccionRegex.test(this.calle)) {
+      this.errores.calle = 'La calle solo puede tener letras.';
+      valido = false;
     }
-    else if (!numerodomicilioRegex.test(this.numerodomicilio)) {
-      this.presentAlert('Error', 'el numero del domicilio no puede contener caracteres especiales')
+    if (this.tipodomicilio === 'casa' && !numerodomicilioRegexCasa.test(this.numerodomicilio)) {
+      this.errores.numerodomicilio = 'El número de domicilio solo puede contener números.';
+      valido = false;
     }
-    else if (this.contrasenarepetida != this.contrasena1) {
-      this.presentAlert('Error', 'Las contraseñas ingresadas no coinciden.')
-    }
-    else {
-      this.presentAlert('Éxito', 'Usted se ha registrado exitosamente.')
-      this.router.navigate(['/login']);
+    if (this.tipodomicilio === 'departamento' && !numerodomicilioRegexDepartamento.test(this.numerodomicilio)) {
+      this.errores.numerodomicilio = 'El número de domicilio puede contener números y letras.';
+      valido = false;
     }
 
-    this.dbService.registrarUsuario(
-      this.usuario1, 
-      this.email1, 
-      this.contrasena1, 
-      this.region, 
-      this.ciudad, 
-      this.calle, 
-      this.tipodomicilio, 
-      this.numerodomicilio
-    )
-    .then(() => {
-      console.log('Registro exitoso');
-      this.presentAlert('Éxito', 'Usted se ha registrado exitosamente.');
-      this.irLogin();
-    })
-    .catch(e => {
-      console.error('Error al registrar usuario', e);
-      this.presentAlert('Error', 'Hubo un problema al registrar el usuario.');
-    });
+    if (valido) {
+      this.dbService.registrarUsuario(
+        this.usuario1,
+        this.email1,
+        this.contrasena1,
+        this.region,
+        this.ciudad,
+        this.calle,
+        this.tipodomicilio,
+        this.numerodomicilio
+      ).then(() => {
+        this.presentAlert('Éxito', 'Usted se ha registrado exitosamente.');
+        this.router.navigate(['/login']);
+      }).catch(e => {
+        this.presentAlert('Error', 'Hubo un problema al registrar el usuario.');
+      });
+    }
   }
+
 
   irLogin() {
     this.router.navigate(['/login']);
+  }
+
+  async presentAlert(titulo: string, msj: string) {
+    const alert = await this.alertController.create({
+      header: titulo,
+      message: msj,
+      buttons: ['OK']
+    });
+    await alert.present();
   }
 }
