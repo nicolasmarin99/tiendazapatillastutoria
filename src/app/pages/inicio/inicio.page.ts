@@ -30,20 +30,16 @@ export class InicioPage implements OnInit {
       }
     });
     
-    //this.presentAlert("1"); 
-    //this.dbService.obtenerProductos();
+    
+  
     this.dbService.fetchProductos().subscribe(data => {
       this.productos = data;
     });
-    this.presentAlert(this.productos+"");
-    //this.presentAlert("2");
+    
   }
 
   ngOnInit() {
-    //this.dbService.obtenerProductos();
-   // this.dbService.fetchProductos().subscribe(data=>{
-    //  this.productos = data;
-   // });
+
   }
 
   // Método para mostrar alertas

@@ -144,6 +144,7 @@ export class ServiciobdService {
     }
   }
 
+
   seleccionarUsuario(): Promise<void> {
     const id_usuario = localStorage.getItem('id_usuario'); // Obtener el id del usuario logueado
 
@@ -303,11 +304,9 @@ async obtenerUltimaCompraConDetalles(id_usuario: number): Promise<any[]> {
         
         // Verificar si existen registros traídos por el select 
         if (res.rows.length > 0) {
-            this.presentAlert("aa", res.rows.length + "");
             
             // Recorrer el resultado registro a registro
             for (var i = 0; i < res.rows.length; i++) {
-                this.presentAlert("1", "for" + res.rows.item(i).id_producto);
                 
                 // Agregar registro a registro en mi arreglo items
                 items2.push({            
@@ -322,7 +321,6 @@ async obtenerUltimaCompraConDetalles(id_usuario: number): Promise<any[]> {
 
                 });
                 
-                this.presentAlert("2", "push");
             }
         }
 
@@ -460,8 +458,6 @@ async obtenerUltimaCompraConDetalles(id_usuario: number): Promise<any[]> {
       await this.database.executeSql(nuevaTablaProductos, []);
       console.log("Tabla Producto recreada con éxito.");
 
-      // Mostrar alerta indicando que el cambio se realizó con éxito
-      await this.presentAlert('Base de datos actualizada', 'El cambio en la tabla Producto fue realizado con éxito.');
 
     } catch (error: any) {
       console.error('Error al recrear la tabla Producto:', error);
