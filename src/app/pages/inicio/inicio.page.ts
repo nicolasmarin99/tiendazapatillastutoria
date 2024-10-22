@@ -16,6 +16,7 @@ export class InicioPage implements OnInit {
   usuario: string = "";
   usuarioRol: number | null = null; // Aquí se almacenará el rol del usuario
   productos: Producto[] = [];
+  productosFiltrados: Producto[] = [];
   
   constructor(
     private router: Router,
@@ -39,6 +40,7 @@ export class InicioPage implements OnInit {
   }
 
   ngOnInit() {
+    this.cargarProductos(); // Cargar todos los productos al inicio
 
   }
 
@@ -80,6 +82,27 @@ export class InicioPage implements OnInit {
   // Función para redirigir a la página de detalles del producto
   irADetalleProducto(id_producto: any): void {
     this.router.navigate(['/producto', id_producto]);
+}
+
+ // Cargar todos los productos
+cargarProductos() {
+  this.dbService.fetchProductos().subscribe(data => {
+    this.productos = data;
+    this.productosFiltrados = [...this.productos]; // Iniciar con todos los productos
+  });
+}
+
+// Función para filtrar productos por el término de búsqueda
+filtrarProductos(termino: string) {
+  if (!termino) {
+    // Si no hay búsqueda, mostrar todos los productos
+    this.productosFiltrados = [...this.productos];
+  } else {
+    // Filtrar los productos por el nombre
+    this.productosFiltrados = this.productos.filter(producto =>
+      producto.nombre_producto.toLowerCase().includes(termino.toLowerCase())
+    );
+  }
 }
 
   irZapatillasad(){

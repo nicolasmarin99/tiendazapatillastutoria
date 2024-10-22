@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -11,11 +11,13 @@ export class BarrabusquedaComponent  implements OnInit {
   terminoBusqueda: string = "";
 
   @Input() mensaje: string = "";
+  @Output() buscarProducto = new EventEmitter<string>(); // Emitir el término de búsqueda
   constructor(private router: Router) { }
 
   ngOnInit() {}
 
-  irBusqueda(){
-    this.router.navigate(['/buscar'])
+  // Emitir el término de búsqueda al hacer clic en la lupa o presionar Enter
+  irBusqueda() {
+    this.buscarProducto.emit(this.terminoBusqueda);
   }
 }

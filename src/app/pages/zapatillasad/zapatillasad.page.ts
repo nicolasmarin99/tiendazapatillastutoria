@@ -38,6 +38,7 @@ export class ZapatillasadPage implements OnInit {
   }
 
   ngOnInit() {
+    this.cargarProductos(); // Cargar todos los productos al inicio
   }
 
   async presentAlert(message: string) {
@@ -72,15 +73,30 @@ export class ZapatillasadPage implements OnInit {
   
     // Recargar los productos cada vez que la página se muestra
     this.dbService.obtenerProductos(); // Asegúrate de que esto actualiza los productos desde la base de datos
+    this.cargarProductos(); // Recargar productos al regresar a la página
   }
 
-   // Función para filtrar los productos
-   filtrarProductos() {
-    this.productosFiltrados = this.productos.filter(producto => {
-      const cumplePrecio = (!this.precioMinimo || producto.precio >= this.precioMinimo) && (!this.precioMaximo || producto.precio <= this.precioMaximo);
-      const cumpleTalla = !this.tallaSeleccionada || producto.talla === this.tallaSeleccionada;
+  // Cargar todos los productos
+  cargarProductos() {
+    this.dbService.fetchProductos().subscribe(data => {
+      this.productos = data;
+      this.productosFiltrados = [...this.productos]; // Iniciar con todos los productos
+    });
+  }
 
-      return cumplePrecio && cumpleTalla;
+  filtrarProductos(terminoBusqueda: string = '') {
+    this.productosFiltrados = this.productos.filter(producto => {
+      // Filtrar por precio si está definido
+      const cumplePrecio = (!this.precioMinimo || producto.precio >= this.precioMinimo) && (!this.precioMaximo || producto.precio <= this.precioMaximo);
+      
+      // Filtrar por talla si está seleccionada
+      const cumpleTalla = !this.tallaSeleccionada || producto.talla === this.tallaSeleccionada;
+  
+      // Filtrar por el término de búsqueda en el nombre del producto
+      const cumpleBusqueda = producto.nombre_producto.toLowerCase().includes(terminoBusqueda.toLowerCase());
+  
+      // Retorna solo los productos que cumplen todas las condiciones
+      return cumplePrecio && cumpleTalla && cumpleBusqueda;
     });
   }
 

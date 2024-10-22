@@ -73,7 +73,7 @@
 
   <hr>
 
-  <app-barrabusqueda mensaje="Buscar zapatilla..."></app-barrabusqueda>
+  <app-barrabusqueda mensaje="Buscar zapatilla..." (buscarProducto)="filtrarProductos($event)"></app-barrabusqueda>
 
   <hr>
     
@@ -88,22 +88,23 @@
   </div>
   <hr>
 
-  <ion-list>
-    <ion-item *ngFor="let producto of productosFiltrados">
-      <ion-card>
-        <img class="imagen" *ngIf="producto.imagen_producto" [src]="producto.imagen_producto" alt="Imagen del producto" (click)="irADetalleProducto(producto.id_producto)"/>
-        <ion-card-header>
-          <ion-card-title>{{ producto.nombre_producto }}</ion-card-title>
-          <ion-card-subtitle>Marca: {{ producto.marca }}</ion-card-subtitle>
-        </ion-card-header>
-        <ion-card-content>
-          <p>Talla: {{ producto.talla }}</p>
-          <p>Precio: ${{ producto.precio }}</p>
-          <p>Cantidad: {{ producto.cantidad }}</p>
-        </ion-card-content>
-      </ion-card>
-    </ion-item>
-  </ion-list>
+  <!-- Lista de productos filtrados -->
+<ion-list>
+  <ion-item *ngFor="let producto of productosFiltrados">
+    <ion-card>
+      <img class="imagen" *ngIf="producto.imagen_producto" [src]="producto.imagen_producto" alt="Imagen del producto"/>
+      <ion-card-header>
+        <ion-card-title>{{ producto.nombre_producto }}</ion-card-title>
+        <ion-card-subtitle>Marca: {{ producto.marca }}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <p>Talla: {{ producto.talla }}</p>
+        <p>Precio: ${{ producto.precio }}</p>
+        <p>Cantidad: {{ producto.cantidad }}</p>
+      </ion-card-content>
+    </ion-card>
+  </ion-item>
+</ion-list>
 
 </ion-content>
 
