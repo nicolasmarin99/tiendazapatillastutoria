@@ -3,7 +3,7 @@ import { NavigationExtras, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/autentificacion.service'; // Asegúrate de que la ruta sea correcta
 import { ServiciobdService } from 'src/app/services/serviciobd.service';
-import { Vibration } from '@awesome-cordova-plugins/vibration/ngx'; // Importa el servicio de vibración
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -18,8 +18,7 @@ export class LoginPage implements OnInit {
     private router: Router,
     private alertController: AlertController,
     private authService: AuthService, // Inyecta el servicio de autenticación
-    private dbService:ServiciobdService,
-    private vibration: Vibration // Inyecta el servicio de vibración
+    private dbService:ServiciobdService
   ) {}
 
   ngOnInit() {}
@@ -50,15 +49,13 @@ export class LoginPage implements OnInit {
       return;
     }
 
+    // Llama al método login del AuthService
     const loginSuccess = await this.authService.login(this.usuario1, this.contrasena1);
 
     if (loginSuccess) {
-      // Vibrar cuando el inicio de sesión sea exitoso
-      this.vibration.vibrate(1000); // Vibrar durante 1 segundo
-
       // Usuario encontrado, permitir acceso
       this.presentAlert('Éxito', 'Usted ha accedido exitosamente.');
-
+      
       // Redirigir a la página de inicio
       let navigationExtras: NavigationExtras = {
         state: {
