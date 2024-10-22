@@ -19,12 +19,11 @@ export class BarranavComponent implements OnInit {
   irPerfil() {
     // Comprueba si hay un usuario autenticado
     if (this.authService.isLoggedIn()) {
-      // Obtiene el nombre del usuario autenticado
-      const usuario = this.authService.getUser();
-      // Aquí podrías realizar lógica adicional si deseas mostrar perfiles diferentes según el usuario
-      this.router.navigate(['/perfil']); // Redirige al perfil del usuario
+      // Redirige al perfil si está logueado
+      this.router.navigate(['/perfil']);
     } else {
-      this.router.navigate(['/login']); // Si no hay usuario autenticado, redirige al login
+      // Si no está logueado, redirige al login
+      this.router.navigate(['/login']);
     }
   }
 }

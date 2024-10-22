@@ -33,11 +33,12 @@ export class AuthService {
   }
 
   // Método para cerrar sesión
-  logout() {
-    this.isAuthenticated = false;
-    this.currentUser = null;
-    localStorage.removeItem('user'); // Limpia la información del usuario
-  }
+logout() {
+  this.isAuthenticated = false;
+  this.currentUser = null;
+  localStorage.removeItem('user'); // Elimina el usuario del localStorage
+  localStorage.removeItem('id_usuario'); // Elimina también el id_usuario del localStorage
+}
 
   // Método para verificar si el usuario está autenticado
   isLoggedIn(): boolean {

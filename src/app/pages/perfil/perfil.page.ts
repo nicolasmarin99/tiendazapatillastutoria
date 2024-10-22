@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { ServiciobdService } from 'src/app/services/serviciobd.service'; 
 import { DatosDireccion } from 'src/app/services/usuarios';  // Asegúrate de importar DatosDireccion
+import { AuthService } from 'src/app/services/autentificacion.service'; // Asegúrate de importar el servicio correcto
 
 @Component({
   selector: 'app-perfil',
@@ -26,7 +27,8 @@ export class PerfilPage implements OnInit {
   constructor(
     private router: Router, 
     private dbService: ServiciobdService, 
-    private alertController: AlertController
+    private alertController: AlertController,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -102,9 +104,9 @@ export class PerfilPage implements OnInit {
   }
 
   cerrarSesion() {
-    localStorage.removeItem('idUsuario');
+    this.authService.logout();  // Usa el AuthService en lugar de ServiciobdService
     this.presentAlert('Adiós', 'Usted ha cerrado sesión.');
-    this.router.navigate(['/login']);
+    this.router.navigate(['/inicio']); // Redirigir al login
   }
 
   irEditarperfil() {

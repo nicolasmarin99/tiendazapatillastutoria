@@ -21,7 +21,9 @@ export class LoginPage implements OnInit {
     private dbService:ServiciobdService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.authService.logout();
+  }
 
   async presentAlert(titulo: string, msj: string) {
     const alert = await this.alertController.create({
