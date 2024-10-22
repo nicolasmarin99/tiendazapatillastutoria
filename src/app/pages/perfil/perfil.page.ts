@@ -104,9 +104,11 @@ export class PerfilPage implements OnInit {
   }
 
   cerrarSesion() {
-    this.authService.logout();  // Usa el AuthService en lugar de ServiciobdService
+    this.authService.logout();  // Usa el método del AuthService para limpiar la sesión
+    localStorage.removeItem('id_usuario');  // Elimina el id_usuario del localStorage
+    localStorage.removeItem('user');  // Elimina el nombre del usuario del localStorage
     this.presentAlert('Adiós', 'Usted ha cerrado sesión.');
-    this.router.navigate(['/inicio']); // Redirigir al login
+    this.router.navigate(['/login']); // Redirigir al login
   }
 
   irEditarperfil() {

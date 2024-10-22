@@ -41,7 +41,27 @@ export class InicioPage implements OnInit {
 
   ngOnInit() {
     this.cargarProductos(); // Cargar todos los productos al inicio
+    this.verificarRolUsuario();
 
+  }
+
+  verificarRolUsuario() {
+    const id_usuario = localStorage.getItem('id_usuario'); 
+    if (id_usuario) {
+      // Aquí puedes hacer una llamada a la base de datos para obtener el rol si no lo guardas en localStorage
+      // Por ejemplo:
+      this.usuarioRol = Number(localStorage.getItem('usuarioRol')); // Si lo guardas en localStorage
+
+      // Decide qué barra de navegación cargar
+      if (this.usuarioRol === 1) { // Rol de administrador
+        this.router.navigate(['/inicio-administrador']); // Redirigir a la página de inicio del administrador
+      } else {
+        this.router.navigate(['/inicio-usuario']); // Redirigir a la página de inicio del usuario normal
+      }
+    } else {
+      // Si no hay usuario, redirigir al login
+      this.router.navigate(['/login']);
+    }
   }
 
   // Método para mostrar alertas

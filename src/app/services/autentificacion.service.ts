@@ -19,25 +19,30 @@ export class AuthService {
     if (result.rows.length > 0) {
       this.isAuthenticated = true;
       this.currentUser = usuario;
-  
-      // Almacenar el nombre de usuario y el id_usuario en el localStorage
-      const id_usuario = result.rows.item(0).id_usuario; // Obtener el id del primer resultado
-  
+
+      // Obtener el id del usuario y el rol del usuario
+      const id_usuario = result.rows.item(0).id_usuario;
+      const usuarioRol = result.rows.item(0).id_rol;
+
+      // Almacenar el id_usuario, nombre de usuario y el rol en localStorage
       localStorage.setItem('user', usuario);
-      localStorage.setItem('id_usuario', id_usuario); // Guardar el id_usuario en el localStorage
-  
-      return true; // Inicio de sesión exitoso
+      localStorage.setItem('id_usuario', id_usuario);
+      localStorage.setItem('usuarioRol', usuarioRol);  // Guardar el rol del usuario
+
+      return true;  // Inicio de sesión exitoso
     } else {
-      return false; // Credenciales incorrectas
+      return false;  // Credenciales incorrectas
     }
   }
 
   // Método para cerrar sesión
+// Método para cerrar sesión
 logout() {
   this.isAuthenticated = false;
   this.currentUser = null;
-  localStorage.removeItem('user'); // Elimina el usuario del localStorage
-  localStorage.removeItem('id_usuario'); // Elimina también el id_usuario del localStorage
+  localStorage.removeItem('user');  // Limpia la información del usuario
+  localStorage.removeItem('id_usuario');  // Elimina el id_usuario
+  localStorage.removeItem('usuarioRol');  // Elimina el rol del usuario
 }
 
   // Método para verificar si el usuario está autenticado
@@ -49,4 +54,6 @@ logout() {
   getUser(): string | null {
     return localStorage.getItem('user');
   }
+
+  
 }
