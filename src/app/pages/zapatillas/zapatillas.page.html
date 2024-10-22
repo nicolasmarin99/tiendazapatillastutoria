@@ -92,7 +92,7 @@
 <ion-list>
   <ion-item *ngFor="let producto of productosFiltrados">
     <ion-card>
-      <img class="imagen" *ngIf="producto.imagen_producto" [src]="producto.imagen_producto" alt="Imagen del producto"/>
+      <img class="imagen" *ngIf="producto.imagen_producto" [src]="producto.imagen_producto" alt="Imagen del producto" (click)="irADetalleProducto(producto.id_producto)"/>
       <ion-card-header>
         <ion-card-title>{{ producto.nombre_producto }}</ion-card-title>
         <ion-card-subtitle>Marca: {{ producto.marca }}</ion-card-subtitle>

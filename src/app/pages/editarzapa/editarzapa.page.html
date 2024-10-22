@@ -10,6 +10,7 @@
       <ion-label>Nombre</ion-label>
       <ion-input [(ngModel)]="producto.nombre_producto" name="nombre"></ion-input>
     </ion-item>
+    <ion-text color="danger" *ngIf="errorNombre">{{ errorNombre }}</ion-text>
 
     <ion-item>
       <ion-select aria-label="Marca" interface="action-sheet" placeholder="Marca" [(ngModel)]="producto.marca">
@@ -26,6 +27,7 @@
         <ion-select-option value="skechers">skechers</ion-select-option>
       </ion-select>
     </ion-item>
+    <ion-text color="danger" *ngIf="errorMarca">{{ errorMarca }}</ion-text>
 
     <ion-list class="sin-padding">
       <ion-item>
@@ -42,16 +44,19 @@
         </ion-select>
       </ion-item>
     </ion-list>
+    <ion-text color="danger" *ngIf="errorTalla">{{ errorTalla }}</ion-text>
 
     <ion-item>
       <ion-label>Precio</ion-label>
       <ion-input type="number" [(ngModel)]="producto.precio" name="precio"></ion-input>
     </ion-item>
+    <ion-text color="danger" *ngIf="errorPrecio">{{ errorPrecio }}</ion-text>
 
     <ion-item>
       <ion-label>Cantidad</ion-label>
       <ion-input type="number" [(ngModel)]="producto.cantidad" name="cantidad"></ion-input>
     </ion-item>
+    <ion-text color="danger" *ngIf="errorCantidad">{{ errorCantidad }}</ion-text>
 
     <!-- Puedes agregar un campo para seleccionar o cargar una nueva imagen -->
 

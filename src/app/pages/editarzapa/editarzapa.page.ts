@@ -17,6 +17,13 @@ export class EditarzapaPage implements OnInit {
   imagen: Blob | null = null; // Para almacenar la imagen como BLOB
   producto: Producto;
 
+  // Variables para almacenar los errores de validación
+  errorNombre: string = '';
+  errorMarca: string = '';
+  errorTalla: string = '';
+  errorPrecio: string = '';
+  errorCantidad: string = '';
+
   constructor(private router: Router,private alertController: AlertController,private dbService:ServiciobdService,private activedrouter:ActivatedRoute) { 
     this.producto = new Producto();
   }
@@ -58,9 +65,46 @@ export class EditarzapaPage implements OnInit {
 
 
   guardarCambios() {
-    // Llama al servicio de base de datos para actualizar el producto
+    // Limpiar los mensajes de error antes de validar
+    this.errorNombre = '';
+    this.errorMarca = '';
+    this.errorTalla = '';
+    this.errorPrecio = '';
+    this.errorCantidad = '';
+
+    // Validar que el nombre no esté vacío
+    if (!this.producto.nombre_producto) {
+      this.errorNombre = 'El nombre no puede estar vacío.';
+    }
+
+    // Validar que la marca no esté vacía
+    if (!this.producto.marca) {
+      this.errorMarca = 'La marca no puede estar vacía.';
+    }
+
+    // Validar que la talla no esté vacía
+    if (!this.producto.talla) {
+      this.errorTalla = 'La talla no puede estar vacía.';
+    }
+
+    // Validar que el precio sea mayor a 0
+    if (this.producto.precio <= 0 || isNaN(this.producto.precio)) {
+      this.errorPrecio = 'El precio debe ser un número positivo mayor a 0.';
+    }
+
+    // Validar que la cantidad sea mayor a 0
+    if (this.producto.cantidad <= 0 || isNaN(this.producto.cantidad)) {
+      this.errorCantidad = 'La cantidad debe ser un número positivo mayor a 0.';
+    }
+
+    // Si hay algún error, no proceder con la actualización
+    if (this.errorNombre || this.errorMarca || this.errorTalla || this.errorPrecio || this.errorCantidad) {
+      return;
+    }
+
+    // Si todo es válido, guardar los cambios
     this.dbService.actualizarProducto(this.producto).then(() => {
-      // Redirige a la página de productos o muestra un mensaje de éxito
+      this.presentAlert('Éxito', 'Producto actualizado correctamente.');
       this.router.navigate(['/producto', this.producto.id_producto]);
     }).catch(error => {
       console.error('Error al actualizar el producto:', error);
