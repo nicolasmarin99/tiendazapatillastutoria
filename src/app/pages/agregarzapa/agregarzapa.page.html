@@ -10,15 +10,21 @@
       <app-logo></app-logo>
 
       <div class="contenedor-input margin-auto">
+        <!-- Nombre zapatilla -->
         <ion-input label="Nombre zapatilla" label-placement="floating" fill="outline" type="text" placeholder="Ingrese el nombre de la zapatilla." [(ngModel)]="zapatilla"></ion-input>
+        <p *ngIf="errorZapatilla" class="error-message">{{ errorZapatilla }}</p>
 
         <br>
 
+        <!-- Cantidad -->
         <ion-input label="Cantidad" label-placement="floating" fill="outline" type="number" placeholder="Ingrese la cantidad." [(ngModel)]="cantidad"></ion-input>
+         <p *ngIf="errorCantidad" class="error-message">{{ errorCantidad }}</p>
 
         <br>
 
+        <!-- Precio -->
         <ion-input label="Precio" label-placement="floating" fill="outline" type="number" placeholder="Ingrese el precio." [(ngModel)]="precio"></ion-input>
+        <p *ngIf="errorPrecio" class="error-message">{{ errorPrecio }}</p>
 
         <br>
 
@@ -38,6 +44,7 @@
               </ion-select>
             </ion-item>
           </ion-list>
+          <p *ngIf="errorTalla" class="error-message">{{ errorTalla }}</p>
         </div>
 
         <br>
@@ -60,12 +67,13 @@
               </ion-select>
             </ion-item>
           </ion-list>
+          <p *ngIf="errorMarca" class="error-message">{{ errorMarca }}</p>
         </div>
 
-        <br>
 
         <!-- Botón para elegir imagen de la galería -->
         <ion-button (click)="tomarFoto()">Seleccionar Imagen</ion-button>
+        <p *ngIf="errorImagen" class="error-message">{{ errorImagen }}</p>
         <!-- Mostrar la imagen seleccionada -->
         <div class="contenedor-imagen margin-auto centrar">
           <img *ngIf="imagenPreview" [src]="imagenPreview" alt="Imagen de la zapatilla" class="tamano-imagen">
