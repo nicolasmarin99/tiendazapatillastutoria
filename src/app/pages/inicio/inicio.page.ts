@@ -134,4 +134,8 @@ filtrarProductos(termino: string) {
   irInicio(){
     this.router.navigate(['/inicio'])
   }
+
+  irAMonedas() {
+    this.router.navigate(['/moneda']);
+  }
 }

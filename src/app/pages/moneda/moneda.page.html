@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Tasas de Cambio</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="tasasDeCambio.length > 0; else loading">
+    <ion-list>
+      <ion-item *ngFor="let tasa of tasasDeCambio">
+        <p><strong>Moneda:</strong> {{ tasa.name }}</p>
+        <p><strong>Valor:</strong> {{ tasa.value }}</p>
+      </ion-item>
+    </ion-list>
+  </div>
+  <ng-template #loading>
+    <p>Cargando tasas de cambio...</p>
+  </ng-template>
+</ion-content>

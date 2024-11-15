@@ -92,16 +92,13 @@ const routes: Routes = [
     loadChildren: () => import('./pages/scannerqr/scannerqr.module').then( m => m.ScannerqrPageModule)
   },
   {
+    path: 'moneda',
+    loadChildren: () => import('./pages/moneda/moneda.module').then( m => m.MonedaPageModule)
+  },
+  {
     path: '**',
     loadChildren: () => import('./pages/notfound/notfound.module').then( m => m.NotfoundPageModule)
   },
-  
-
-  
-
-  
-
-  
   
 ];
 
