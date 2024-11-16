@@ -96,9 +96,15 @@ const routes: Routes = [
     loadChildren: () => import('./pages/moneda/moneda.module').then( m => m.MonedaPageModule)
   },
   {
+    path: 'restablecercontrasena',
+    loadChildren: () => import('./pages/restablecercontrasena/restablecercontrasena.module').then( m => m.RestablecercontrasenaPageModule)
+  },
+  {
     path: '**',
     loadChildren: () => import('./pages/notfound/notfound.module').then( m => m.NotfoundPageModule)
   },
+  
+
   
 ];
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { ServiciobdService } from 'src/app/services/serviciobd.service';
@@ -8,25 +8,30 @@ import { ServiciobdService } from 'src/app/services/serviciobd.service';
   templateUrl: './cambiarcontra.page.html',
   styleUrls: ['./cambiarcontra.page.scss'],
 })
-export class CambiarcontraPage implements OnInit {
-
-  email1: string = "";
+export class CambiarcontraPage {
+  email1: string = '';
   usuarioRol: number | null = null; // Aquí se almacenará el rol del usuario
-  constructor(private router: Router,private alertController: AlertController,private dbService:ServiciobdService) { }
+
+  constructor(
+    private dbService: ServiciobdService,
+    private alertController: AlertController,
+    private router: Router
+  ) {}
 
   ngOnInit() {
+
   }
 
-  async presentAlert(titulo: string, msj: string) {
-    const alert = await this.alertController.create({
-      header: titulo,
-      message: msj,
-      buttons: ['OK']
-    });
-    await alert.present();
+  verificarRolUsuario() {
+    const id_usuario = localStorage.getItem('id_usuario'); 
+    if (id_usuario) {
+      // Carga el rol del usuario, pero no redirige automáticamente
+      this.usuarioRol = Number(localStorage.getItem('usuarioRol')); // Si lo guardas en localStorage
+    }
   }
 
   ionViewDidEnter() {
+    // Si decides cargar el rol, puedes hacerlo aquí, pero no redirigir
     const id_usuario = localStorage.getItem('id_usuario');
     if (id_usuario) {
       this.dbService.obtenerRolUsuario(Number(id_usuario)).then(rol => {
@@ -36,17 +41,31 @@ export class CambiarcontraPage implements OnInit {
       });
     }
   }
-  validarCambioContra(){
-    const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if(this.email1== ''){
-      this.presentAlert('Error','Los campos no pueden estar vacios.')
+
+  async presentAlert(titulo: string, mensaje: string) {
+    const alert = await this.alertController.create({
+      header: titulo,
+      message: mensaje,
+      buttons: ['OK'],
+    });
+    await alert.present();
+  }
+
+  async validarCambioContra() {
+    if (!this.email1.trim()) {
+      this.presentAlert('Error', 'Por favor, ingrese su correo electrónico.');
+      return;
     }
-    else if(!correoRegex.test(this.email1)){
-      this.presentAlert('Error','El email no es válido.')
-    }
-    else{
-      this.presentAlert('Enviado','El correo fue enviado con exito.')
-      this.router.navigate(['/cambiarcontrasena'])
+  
+    try {
+      // Generar el token para el usuario
+      const token = await this.dbService.generarToken(this.email1);
+  
+      // Redirigir a la página de restablecimiento con el token en la URL
+      this.router.navigate(['/restablecercontrasena', token]);
+    } catch (error) {
+      // Mostrar error si el correo no está registrado
+      this.presentAlert('Error', 'El correo no está registrado.');
     }
   }
 }

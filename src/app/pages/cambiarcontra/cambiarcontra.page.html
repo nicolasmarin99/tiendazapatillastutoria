@@ -8,35 +8,20 @@
 
   <div class="contenedor-pag">
     <div class="contenedor-login centrar-eje margin-auto">
-      <br>
-      <app-logo></app-logo>
-
-      <br>
-
-      <div class="contenedor-input margin-auto">
-        
-
-        <ion-input label="Email" label-placement="floating" fill="outline" type="email" placeholder="Ingrese su email. Ej: correo@gmail.com" [(ngModel)]="email1"></ion-input>
-
-        <br>
-
-      </div>
+      <ion-input 
+        label="Email" 
+        label-placement="floating" 
+        fill="outline" 
+        type="email" 
+        placeholder="Ingrese su correo" 
+        [(ngModel)]="email1">
+      </ion-input>
 
       <div class="contenedor-input margin-auto centrar">
-        <p>Al ingresar su correo electronico, recibira un mail con el enlace para cambiar la contraseña.</p>
+        <p>Recibirá un enlace para cambiar su contraseña.</p>
       </div>
 
-      <br>
-
-      <br>
-
-      <div class="contenedor-input margin-auto centrar">
-        <ion-button class="color" (click)="validarCambioContra()">
-          <ion-icon slot="start" name="pencil"></ion-icon>
-          Cambiar contraseña
-        </ion-button>
-      </div>
-
+      <ion-button expand="full" (click)="validarCambioContra()">Enviar Enlace</ion-button>
     </div>
   </div>
   

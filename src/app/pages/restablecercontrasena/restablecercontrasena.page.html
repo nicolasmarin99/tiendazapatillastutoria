@@ -1,0 +1,27 @@
+<ion-header [translucent]="true">
+
+  <app-barranav titulo="restablecer contraseña"></app-barranav>
+
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  
+  <div class="contenedor-login centrar-eje margin-auto">
+    <ion-input 
+      label="Nueva Contraseña" 
+      label-placement="floating" 
+      type="password" 
+      [(ngModel)]="nuevaContrasena">
+    </ion-input>
+    <ion-input 
+      label="Confirmar Contraseña" 
+      label-placement="floating" 
+      type="password" 
+      [(ngModel)]="confirmarContrasena">
+    </ion-input>
+
+    <ion-button expand="full" (click)="cambiarContrasena()">Actualizar Contraseña</ion-button>
+  </div>
+    
+</ion-content>
+  

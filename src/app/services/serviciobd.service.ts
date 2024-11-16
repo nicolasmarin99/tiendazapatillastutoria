@@ -4,6 +4,7 @@ import { AlertController, Platform } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { DatosDireccion, Usuarios } from './usuarios';
 import { Producto } from './producto';
+import { v4 as uuidv4 } from 'uuid'; // Instala uuid si es necesario: npm install uuid
 
 @Injectable({
   providedIn: 'root'
@@ -86,6 +87,7 @@ export class ServiciobdService {
       await this.database.executeSql(this.tablaDetallesCompra, []);
       await this.recrearTablaProductos();
       await this.insertarProductosPorDefecto();
+      await this.agregarCamposRestablecimiento();
       
 
       // Inserta el usuario administrador
@@ -635,6 +637,57 @@ async obtenerUltimaCompraConDetalles(id_usuario: number): Promise<any[]> {
     } catch (error) {
       console.error('Error al obtener las compras del usuario:', error);
       throw error;
+    }
+  }
+
+  async agregarCamposRestablecimiento() {
+    try {
+      await this.database.executeSql(`ALTER TABLE Usuario ADD COLUMN reset_token TEXT`, []);
+      await this.database.executeSql(`ALTER TABLE Usuario ADD COLUMN token_expiration TEXT`, []);
+      console.log("Campos para restablecimiento agregados correctamente.");
+    } catch (error) {
+      console.error("Error al agregar campos para restablecimiento:", error);
+    }
+  }
+
+  async generarToken(email: string): Promise<string> {
+    const token = uuidv4(); // Genera un token único
+    const expiration = new Date(Date.now() + 3600 * 1000).toISOString(); // Expira en 1 hora
+  
+    // Actualiza el usuario con el token y la expiración
+    const query = `
+      UPDATE Usuario 
+      SET reset_token = ?, token_expiration = ? 
+      WHERE email = ?
+    `;
+    
+    const res = await this.database.executeSql(query, [token, expiration, email]);
+  
+    // Verificar si el correo existe en la base de datos
+    if (res.rowsAffected === 0) {
+      throw new Error('Correo no registrado');
+    }
+  
+    return token; // Devuelve el token generado
+  }
+
+  async actualizarContrasenaConToken(token: string, nuevaContrasena: string): Promise<void> {
+    // Validar que la contraseña cumpla los requisitos mínimos
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+    if (!passwordRegex.test(nuevaContrasena)) {
+      throw new Error('La contraseña no cumple con los requisitos de seguridad.');
+    }
+  
+    const query = `
+      UPDATE Usuario 
+      SET contraseña = ?, reset_token = NULL, token_expiration = NULL
+      WHERE reset_token = ? AND token_expiration > datetime('now')
+    `;
+  
+    const res = await this.database.executeSql(query, [nuevaContrasena, token]);
+  
+    if (res.rowsAffected === 0) {
+      throw new Error('Token inválido o expirado.');
     }
   }
 
