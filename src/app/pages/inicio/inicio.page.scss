@@ -1,61 +1,55 @@
-ion-content{
-    --background: linear-gradient(to bottom,#eaeaea,#111010);
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+ion-content {
+    --background: linear-gradient(to bottom, #eaeaea, #111010);
+    display: flex; /* Habilitar Flexbox */
+    flex-direction: column; /* Alinear elementos en columna */
+    align-items: center; /* Centrar horizontalmente */
 }
 
-
-.centrar{
-    text-align: center;
-}
-
-.color-negro{
-    color:black;
-}
-
-.letras-negrita{
-    font-weight: bold;
-}
-
-ion-toolbar{
-    --background: #000000;
-}
-.contenedor-flex{
+ion-list {
     display: flex;
-}
-.contenedor-footer{
-    width: 25%;
-    height: 100%;
-    text-align: center;
-    align-items: center;
-}
-.tamano-general-imagenes{
-    max-width: 40px;
-    max-height: 40px;
-}
-.color-negro{
-    color:black;
-}
-.agrandar-icono{
-    font-size: 35px;
-}
-.centrar{
-    text-align: center;
-}
-.arreglar-lista{
-    margin-top: 3px;
+    flex-direction: column; /* Mantener las tarjetas en columna */
+    align-items: center; /* Centrar horizontalmente */
+    justify-content: center; /* Centrar verticalmente */
+    width: 100%; /* Asegurar que ocupe todo el ancho */
 }
 
-.imagen{
-    height: 200px;
-    width: 300px;
+ion-item {
+    width: 100%; /* Asegura que los items ocupen toda la lista */
+    display: flex;
+    justify-content: center;
 }
 
-ion-card{
-    --background: white ;
+ion-card {
+    --background: white;
     color: black;
-    align-items: center;
     text-align: center;
+    margin: 10px auto; /* Espaciado automático horizontal */
+    width: 90%; /* Tamaño de las tarjetas */
+    max-width: 400px; /* Máximo ancho */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombras */
+    border-radius: 8px; /* Esquinas redondeadas */
 }
 
-ion-card-title{
-    color:#000000
+.boton-moneda {
+    text-align: right; /* Mueve el botón hacia la derecha */
+    margin: 0 10px 10px 0; /* Espaciado: margen superior, derecho e inferior */
+}
+
+.boton-negro {
+    --background: #000000; /* Fondo negro */
+    --color: #ffffff; /* Texto blanco */
+    font-size: 12px; /* Texto más pequeño */
+    padding: 5px 10px; /* Reduce el tamaño del botón */
+    border-radius: 5px; /* Esquinas redondeadas */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); /* Sombra sutil */
+}
+
+.fuente-comercial {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem; /* Tamaño más grande */
+    letter-spacing: 1px; /* Espaciado entre letras */
+    color: #333333; /* Un gris comercial */
+    text-transform: uppercase; /* Texto en mayúsculas */
 }

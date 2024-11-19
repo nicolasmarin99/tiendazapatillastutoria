@@ -12,16 +12,18 @@
 
   <app-barrabusqueda mensaje="Buscar zapatilla..." (buscarProducto)="filtrarProductos($event)"></app-barrabusqueda>
 
-   <br>
+  <br>
 
-   <!-- Botón para ver los valores de monedas internacionales -->
-  <ion-button expand="full" (click)="irAMonedas()">
-    Ver valores de monedas internacionales
-  </ion-button>
+  <!-- Botón para ver los valores de monedas internacionales -->
+  <div class="boton-moneda">
+    <ion-button expand="block" (click)="irAMonedas()" class="boton-negro">
+      Ver valores de monedas internacionales
+    </ion-button>
+  </div>
 
-   <br>
+  <br>
   
-  <h3 class="centrar color-negro letras-negrita">Lo más vendido</h3>
+  <h3 class="centrar color-negro letras-negrita fuente-comercial">Lo más vendido</h3>
 
   <br>
 
