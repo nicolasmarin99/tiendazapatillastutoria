@@ -84,6 +84,13 @@ export class RegistrarPage implements OnInit {
       this.errores.contrasenarepetida = 'Las contraseñas no coinciden.';
       valido = false;
     }
+    if (!this.contrasena1 || !this.contrasenarepetida) {
+      this.errores.contrasenarepetida = 'Las contraseñas no coinciden.';
+      valido = false;
+    } else if (this.contrasenarepetida !== this.contrasena1) {
+      this.errores.contrasenarepetida = 'Las contraseñas no coinciden.';
+      valido = false;
+    }
     if (!direccionRegex.test(this.ciudad)) {
       this.errores.ciudad = 'La ciudad solo puede tener letras.';
       valido = false;
