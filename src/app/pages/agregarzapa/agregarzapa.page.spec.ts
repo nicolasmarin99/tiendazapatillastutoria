@@ -6,29 +6,27 @@ import { Platform, AlertController } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
-// Mock de SQLite
 const mockSQLite = {
   create: jasmine.createSpy('create').and.returnValue(Promise.resolve({
     executeSql: jasmine.createSpy('executeSql').and.returnValue(Promise.resolve({ rows: { length: 0 } }))
   }))
 };
 
-// Mock de ServiciobdService
 const mockServiciobdService = {
   agregarProducto: jasmine.createSpy('agregarProducto').and.returnValue(Promise.resolve()),
   obtenerProductos: jasmine.createSpy('obtenerProductos').and.returnValue(Promise.resolve([]))
 };
 
-// Mock de Platform
 const mockPlatform = {
   ready: jasmine.createSpy('ready').and.returnValue(Promise.resolve())
 };
 
-// Mock de AlertController
 const mockAlertController = {
-  create: jasmine.createSpy('create').and.returnValue(Promise.resolve({
-    present: jasmine.createSpy('present')
-  }))
+  create: jasmine.createSpy('create').and.returnValue(
+    Promise.resolve({
+      present: jasmine.createSpy('present').and.returnValue(Promise.resolve())
+    })
+  )
 };
 
 describe('AgregarZapaPage', () => {
@@ -41,7 +39,7 @@ describe('AgregarZapaPage', () => {
       imports: [
         FormsModule,
         ReactiveFormsModule,
-        IonicModule.forRoot() // Necesario para soportar componentes de Ionic
+        IonicModule.forRoot()
       ],
       providers: [
         { provide: ServiciobdService, useValue: mockServiciobdService },
@@ -56,7 +54,37 @@ describe('AgregarZapaPage', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('debería crear el componente', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('debería agregar una zapatilla correctamente si todos los campos son válidos', async () => {
+    component.zapatilla = 'Zapatilla Deportiva';
+    component.cantidad = 10;
+    component.precio = 150;
+    component.talla = '9';
+    component.marca = 'Nike';
+    component.imagenPreview = 'data:image/png;base64,IMAGEN_EN_BLOB';
+  
+    await component.agregarZapatilla();
+  
+    expect(mockServiciobdService.agregarProducto).toHaveBeenCalledWith(
+      'Zapatilla Deportiva',
+      'Nike',
+      '9',
+      150,
+      10,
+      'data:image/png;base64,IMAGEN_EN_BLOB'
+    );
+  
+    // Validar que el método create fue llamado con los argumentos correctos
+    expect(mockAlertController.create).toHaveBeenCalledWith(jasmine.objectContaining({
+      header: 'Éxito',
+      message: 'Producto agregado correctamente.'
+    }));
+  
+    // Validar que present fue llamado
+    const alertInstance = await mockAlertController.create.calls.mostRecent().returnValue;
+    expect(alertInstance.present).toHaveBeenCalled();
   });
 });
