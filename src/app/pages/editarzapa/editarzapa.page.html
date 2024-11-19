@@ -5,15 +5,14 @@
 <ion-content [fullscreen]="true">
   
   <form (ngSubmit)="guardarCambios()">
-    
     <ion-item>
       <ion-label>Nombre</ion-label>
       <ion-input [(ngModel)]="producto.nombre_producto" name="nombre"></ion-input>
     </ion-item>
     <ion-text color="danger" *ngIf="errorNombre">{{ errorNombre }}</ion-text>
-
+  
     <ion-item>
-      <ion-select aria-label="Marca" interface="action-sheet" placeholder="Marca" [(ngModel)]="producto.marca">
+      <ion-select aria-label="Marca" interface="action-sheet" placeholder="Marca" [(ngModel)]="producto.marca" name="marca">
         <ion-select-option value="Puma">Puma</ion-select-option>
         <ion-select-option value="Adidas">Adidas</ion-select-option>
         <ion-select-option value="nike">nike</ion-select-option>
@@ -28,10 +27,10 @@
       </ion-select>
     </ion-item>
     <ion-text color="danger" *ngIf="errorMarca">{{ errorMarca }}</ion-text>
-
+  
     <ion-list class="sin-padding">
       <ion-item>
-        <ion-select aria-label="Talla" interface="action-sheet" placeholder="Talla (US)" [(ngModel)]="producto.talla">
+        <ion-select aria-label="Talla" interface="action-sheet" placeholder="Talla (US)" [(ngModel)]="producto.talla" name="talla">
           <ion-select-option value="7.5">7.5 (25.5 cms)</ion-select-option>
           <ion-select-option value="8">8 (26 cms)</ion-select-option>
           <ion-select-option value="8.5">8.5 (26.5 cms)</ion-select-option>
@@ -45,21 +44,19 @@
       </ion-item>
     </ion-list>
     <ion-text color="danger" *ngIf="errorTalla">{{ errorTalla }}</ion-text>
-
+  
     <ion-item>
       <ion-label>Precio</ion-label>
       <ion-input type="number" [(ngModel)]="producto.precio" name="precio"></ion-input>
     </ion-item>
     <ion-text color="danger" *ngIf="errorPrecio">{{ errorPrecio }}</ion-text>
-
+  
     <ion-item>
       <ion-label>Cantidad</ion-label>
       <ion-input type="number" [(ngModel)]="producto.cantidad" name="cantidad"></ion-input>
     </ion-item>
     <ion-text color="danger" *ngIf="errorCantidad">{{ errorCantidad }}</ion-text>
-
-    <!-- Puedes agregar un campo para seleccionar o cargar una nueva imagen -->
-
+  
     <ion-button expand="block" type="submit">Guardar Cambios</ion-button>
   </form>
       

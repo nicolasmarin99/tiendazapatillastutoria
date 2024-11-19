@@ -1,10 +1,6 @@
 <ion-header>
-
   <app-barranav titulo="Bienvenido {{ usuario }}" [tipousuario]="usuario"></app-barranav>
- 
 </ion-header>
-
-
 
 <ion-content [fullscreen]="true">
   <app-logo></app-logo>
@@ -32,22 +28,28 @@
       </ion-item>
 
       <ion-item>
-        <ion-select label="seleccione su region" label-placement="floating" fill="solid" [(ngModel)]="region">
-          <ion-select-option value="arica y parinacota">arica y parinacota</ion-select-option>
-          <ion-select-option value="region de antofagasta">region de antofagasta</ion-select-option>
-          <ion-select-option value="region de atacama">region de atacama</ion-select-option>
-          <ion-select-option value="region de coquimbo">region de coquimbo</ion-select-option>
-          <ion-select-option value="region de valparaiso">region de valparaiso</ion-select-option>
-          <ion-select-option value="region metropolitana">region metropolitana</ion-select-option>
-          <ion-select-option value="region de Ohiggins">region de Ohiggins</ion-select-option>
-          <ion-select-option value="region del maule">region del maule</ion-select-option>
-          <ion-select-option value="region de ñuble">region de ñuble</ion-select-option>
-          <ion-select-option value="region del bio bio">region del bio bio</ion-select-option>
-          <ion-select-option value="region de la araucania">region de la araucania</ion-select-option>
-          <ion-select-option value="region de los lagos">region de los lagos</ion-select-option>
-          <ion-select-option value="region de los rios">region de los rios</ion-select-option>
-          <ion-select-option value="region de aysen">region de aysen</ion-select-option>
-          <ion-select-option value="region de magallanes">region de magallanes</ion-select-option>   
+        <ion-select 
+          label="Seleccione su región" 
+          label-placement="floating" 
+          fill="solid" 
+          [(ngModel)]="region" 
+          name="region" 
+          required>
+          <ion-select-option value="arica y parinacota">Arica y Parinacota</ion-select-option>
+          <ion-select-option value="region de antofagasta">Región de Antofagasta</ion-select-option>
+          <ion-select-option value="region de atacama">Región de Atacama</ion-select-option>
+          <ion-select-option value="region de coquimbo">Región de Coquimbo</ion-select-option>
+          <ion-select-option value="region de valparaiso">Región de Valparaíso</ion-select-option>
+          <ion-select-option value="region metropolitana">Región Metropolitana</ion-select-option>
+          <ion-select-option value="region de Ohiggins">Región de O'Higgins</ion-select-option>
+          <ion-select-option value="region del maule">Región del Maule</ion-select-option>
+          <ion-select-option value="region de ñuble">Región de Ñuble</ion-select-option>
+          <ion-select-option value="region del bio bio">Región del Bío-Bío</ion-select-option>
+          <ion-select-option value="region de la araucania">Región de la Araucanía</ion-select-option>
+          <ion-select-option value="region de los lagos">Región de Los Lagos</ion-select-option>
+          <ion-select-option value="region de los rios">Región de Los Ríos</ion-select-option>
+          <ion-select-option value="region de aysen">Región de Aysén</ion-select-option>
+          <ion-select-option value="region de magallanes">Región de Magallanes</ion-select-option>
         </ion-select>
       </ion-item>
 
@@ -63,19 +65,16 @@
         <ion-input [(ngModel)]="nueva_contrasena" name="nueva_contrasena" type="password"></ion-input>
       </ion-item>
 
-  
       <ion-button expand="full" type="submit">Guardar Cambios</ion-button>
     </form>
   </ion-content>
 </ion-content>
 
 <ion-footer>
+  <!-- Mostrar para usuarios con rol 2 -->
+  <app-barrafooter *ngIf="usuarioRol === 2"></app-barrafooter>
+  <app-barrafooter *ngIf="usuarioRol === null"></app-barrafooter>
 
-      <!-- Mostrar para usuarios con rol 2 -->
-      <app-barrafooter *ngIf="usuarioRol === 2"></app-barrafooter>
-      <app-barrafooter *ngIf="usuarioRol === null"></app-barrafooter>
-
-      <!-- Mostrar para otros roles o si el rol no se ha cargado -->
-      <app-barrafooter2 *ngIf="usuarioRol === 1"></app-barrafooter2>
-  
+  <!-- Mostrar para otros roles o si el rol no se ha cargado -->
+  <app-barrafooter2 *ngIf="usuarioRol === 1"></app-barrafooter2>
 </ion-footer>
