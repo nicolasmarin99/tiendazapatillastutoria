@@ -56,37 +56,44 @@ export class PagoPage implements OnInit {
 
   // Procesar el pago (solo un ejemplo, necesitarías implementar la lógica real)
   async procesarPago() {
+    console.log('Inicio del método procesarPago'); // Log temporal
+  
     // Mostrar los mensajes de error si la validación falla
     this.mostrarErrores = true;
-
-    // Validar el formulario de pago antes de continuar
-    if (!this.formularioValido()) {
-      this.presentAlert('Error', 'Por favor, completa correctamente todos los campos.');
-      return;
-    }
-
+  
+    // Verifica si el usuario está identificado
     const id_usuario = localStorage.getItem('id_usuario');
     if (!id_usuario) {
-      this.presentAlert('Error', 'No se ha identificado al usuario.');
+      console.log('Usuario no identificado, deteniendo ejecución'); // Log temporal
+      await this.presentAlert('Error', 'No se ha identificado al usuario.');
+      return; // Este return detiene la ejecución
+    }
+  
+    // Validar el formulario de pago antes de continuar
+    if (!this.formularioValido()) {
+      console.log('Formulario inválido, deteniendo ejecución'); // Log temporal
+      await this.presentAlert('Error', 'Por favor, completa correctamente todos los campos.');
       return;
     }
-
+  
     const usuarioIdNumber = Number(id_usuario);
     const fecha = new Date().toISOString(); // Fecha actual
-
+  
     // Registrar la compra en la base de datos
-    this.dbService.registrarCompra(usuarioIdNumber, fecha, this.precioTotal, this.carrito)
+    console.log('Intentando registrar la compra'); // Log temporal
+    await this.dbService
+      .registrarCompra(usuarioIdNumber, fecha, this.precioTotal, this.carrito)
       .then(() => {
-        // Limpiar el carrito después de la compra
+        console.log('Compra registrada, limpiando carrito'); // Log temporal
         this.carritoService.limpiarCarrito();
-
+  
         // Mostrar alerta de confirmación de compra
         this.presentAlert('Compra finalizada', 'Su compra ha sido registrada con éxito.');
-
+  
         // Redirigir a detalleboleta.html
         this.router.navigate(['/detalleboleta']);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error al registrar la compra:', error);
         this.presentAlert('Error', 'Hubo un problema al procesar la compra.');
       });
